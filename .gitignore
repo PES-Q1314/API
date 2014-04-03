@@ -1,0 +1,16 @@
+# Ignore IDE files
+.idea
+
+# Ignore python bytecompiled files
+*.pyc
+
+# Ignore editors backup files
+*~
+
+# Ignore database files
+*.db
+*.sqlite3
+
+# Ignore MacOSX Desktop Service Store file
+.DS_STORE
+.project
