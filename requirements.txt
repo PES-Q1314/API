@@ -1,0 +1,9 @@
+# Usage: pip install -r requirements.txt
+# Django itself
+Django>=1.6,<1.7
+
+# Python Image Library, setuptools compatible (needed for the ImageField)
+Pillow>=2
+
+# REST API framework
+django-tastypie==0.11.0
