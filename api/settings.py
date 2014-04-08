@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+AUTH_USER_MODEL = 'account.UPCUser'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -35,7 +36,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cuenta',
+
+    # Our apps
+    'apps.base',
+    'apps.account',
+    'apps.user',
 
     # Rest API
     'tastypie'
@@ -83,3 +88,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Tastypie settings
+TASTYPIE_DEFAULT_FORMATS = ['json']
+TASTYPIE_ALLOW_MISSING_SLASH = True
