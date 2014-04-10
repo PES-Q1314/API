@@ -17,3 +17,6 @@
 
 # Ignore virtualenv
 venv/
+./venv/
+venv
+./venv
