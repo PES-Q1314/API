@@ -41,6 +41,8 @@ INSTALLED_APPS = (
     'apps.base',
     'apps.cuentas',
     'apps.usuarios',
+    'apps.ofertas',
+    'apps.suscripciones',
 
     # Rest API
     'tastypie'

@@ -1,5 +1,7 @@
+# coding=utf-8
 from apps.base import enums
 from apps.base.models import ConocimientoTecnico, SectorDelMercado, Idioma
+from apps.suscripciones.models import ModeloSuscribible
 from apps.usuarios.models import Empresa, Profesor, Estudiante
 from django.db import models
 
@@ -56,8 +58,9 @@ class RequisitoDeIdioma(models.Model):
     idioma = models.ForeignKey(Idioma)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO)
 
-
-class OfertaDeEmpresa(Oferta):
+# TODO: Revalorar el hecho de que una oferta sea abstracta, para poder hacer
+# que la oferta genérica sea un ModeloSuscribible en sí misma
+class OfertaDeEmpresa(ModeloSuscribible, Oferta):
     # TODO: En este y otros modelos, marcar como ', blank=True, null=True' aquellos campos que puedan quedar vacíos
     autor = models.ForeignKey(Empresa)
     ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO)
@@ -67,9 +70,9 @@ class OfertaDeEmpresa(Oferta):
     email_de_contacto = models.EmailField()
 
 
-class OfertaDeDepartamento(Oferta):
+class OfertaDeDepartamento(ModeloSuscribible, Oferta):
     autor = models.ForeignKey(Profesor)
 
 
-class OfertaDeProyectoEmprendedor(Oferta):
+class OfertaDeProyectoEmprendedor(ModeloSuscribible, Oferta):
     autor = models.ForeignKey(Estudiante)
