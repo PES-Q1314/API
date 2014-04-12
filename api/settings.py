@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-AUTH_USER_MODEL = 'cuenta.UPCUser'
+AUTH_USER_MODEL = 'cuentas.SystemUser'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -39,8 +39,8 @@ INSTALLED_APPS = (
 
     # Our apps
     'apps.base',
-    'apps.cuenta',
-    'apps.user',
+    'apps.cuentas',
+    'apps.usuarios',
 
     # Rest API
     'tastypie'
