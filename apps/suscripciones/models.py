@@ -21,7 +21,7 @@ class Suscripcion(models.Model):
 
     estudiante = models.ForeignKey(Estudiante, related_name='suscripciones')
     fecha = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION)
+    estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION, max_length=20)
 
 
 

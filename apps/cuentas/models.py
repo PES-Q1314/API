@@ -16,7 +16,7 @@ class SystemUserManager(BaseUserManager):
 
 
 class SystemUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField('username', max_length=30, unique=True)
+    username = models.CharField('username', max_length=50, unique=True)
     email = models.EmailField('email address', blank=True)
     date_joined = models.DateTimeField('date joined', default=timezone.now)
 

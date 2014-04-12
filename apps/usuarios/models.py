@@ -16,7 +16,7 @@ class Perfil(models.Model):
     Perfil genérico de un usuario (asegura que solo pueda tener un perfil -Estudiante, Profesor, etc.)
     """
     usuario = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='perfil')
-    nombre = models.CharField()
+    nombre = models.CharField(max_length=100)
 
 
 class Estudiante(Perfil):
@@ -39,17 +39,17 @@ class Estudiante(Perfil):
 
     # Estado de búsqueda de trabajo
     busca_trabajo = models.BooleanField()
-    disponibilidad = models.CharField(choices=enums.DISPONIBILIDAD)
+    disponibilidad = models.CharField(choices=enums.DISPONIBILIDAD, max_length=20)
 
     # Metadatos del estudiante
-    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD)
+    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD, max_length=20)
 
 
 # TODO: Refactorizar estas tres tablas y ponerles un nombre más semántico
 class XConocimientoTecnico(models.Model):
     estudiante = models.ForeignKey(Estudiante)
     conocimiento = models.ForeignKey(ConocimientoTecnico)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
 
 class XExperienciaLaboral(models.Model):
@@ -61,7 +61,7 @@ class XExperienciaLaboral(models.Model):
 class XIdioma(models.Model):
     estudiante = models.ForeignKey(Estudiante)
     idioma = models.ForeignKey(Idioma)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
 
 
@@ -76,7 +76,7 @@ class Empresa(Perfil):
     cif = models.CharField(max_length=9)
     logotipo = models.ImageField(upload_to=get_image_path)
     sector = models.ForeignKey(SectorDelMercado)
-    tamanyo = models.CharField(choices=enums.TAMANYO_DE_EMPRESA)
+    tamanyo = models.CharField(choices=enums.TAMANYO_DE_EMPRESA, max_length=20)
     descripcion = models.TextField()
 
     # Metadatos de la empresa
