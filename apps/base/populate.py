@@ -7,6 +7,7 @@ from apps.base.models import Idioma, ConocimientoTecnico, Departamento, Especial
 for idioma in ISO_639_1:
     Idioma.objects.create(codigo=idioma[0], idioma=idioma[1])
 
+
 # Introducimos todos los departamentos
 for dpt in departamentos.NOMBRES:
     Departamento.objects.create(siglas=dpt[0], nombre=dpt[1], url_upc=departamentos.URL_UPC.format(dpt[2]))
@@ -22,7 +23,7 @@ for ct in conocimientos_tecnicos:
     ConocimientoTecnico.objects.create(conocimiento=ct)
 
 
-sectores = ['Consultoría', 'Urbanismo', 'Auditoría', 'Agricultura', 'Industria', 'Diseño gráfico']
+sectores = ['Consultoría', 'Urbanismo', "Auditoría", 'Agricultura', 'Industria', 'Diseño gráfico']
 for s in sectores:
     SectorDelMercado.objects.create(sector=s)
 

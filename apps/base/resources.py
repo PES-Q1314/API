@@ -2,7 +2,7 @@
 from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento, Especialidad
 from core.resource import get_model_fields
 from tastypie import fields
-from tastypie.authentication import SessionAuthentication
+from tastypie.authentication import SessionAuthentication, Authentication
 from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
@@ -16,7 +16,7 @@ class IdiomaResource(ModelResource):
         # Hay un conjunto fijo de idiomas, y solo se puede consultar
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
-        authentication = SessionAuthentication()
+        authentication = Authentication()
         authorization = ReadOnlyAuthorization()
 
         filtering = {

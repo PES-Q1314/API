@@ -7,7 +7,7 @@ from apps.usuarios.models import Estudiante, EstudianteTieneConocimientoTecnico,
 
 # Obtenemos todos los usuarios y los agrupamos de 3 en 3 (para tener tres de cada tipo de perfiles, y el resto administradores)
 usuarios = SystemUser.objects.all()
-chunks = lambda l, n: [l[x: x + n] for x in xrange(0, len(l), n)]
+chunks = lambda l, n: [l[x: x + n] for x in range(0, len(l), n)]
 grupo = chunks(usuarios, 3)
 
 # CREAMOS ESTUDIANTES
