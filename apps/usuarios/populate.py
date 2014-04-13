@@ -36,8 +36,7 @@ for u in grupo[0]:
                                                           nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
     for i in Idioma.objects.all()[:3]:
-        EstudianteHablaIdioma.objects.create(estudiante=est, idioma=i,
-                                             nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
+        EstudianteHablaIdioma.objects.create(estudiante=est, idioma=i, nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
     s = SectorDelMercado.objects.first()
     EstudianteTieneExperienciaLaboral.objects.create(estudiante=est, sector=s, meses=3)
