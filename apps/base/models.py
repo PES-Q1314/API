@@ -31,7 +31,7 @@ class SectorDelMercado(models.Model):
 class Departamento(models.Model):
     siglas = models.CharField(max_length=6)
     nombre = models.CharField(max_length=50)
-    url_upc = models.URLField(unique=True)
+    url_upc = models.URLField()
 
     class Meta:
         db_table = 'Departamento'
@@ -41,7 +41,7 @@ class Departamento(models.Model):
 class Especialidad(models.Model):
     nombre = models.CharField(max_length=50)
     facultad = models.CharField(max_length=50)
-    url_upc = models.URLField(unique=True)
+    url_upc = models.URLField()
 
     class Meta:
         db_table = 'Especialidad'

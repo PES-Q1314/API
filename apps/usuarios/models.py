@@ -18,7 +18,7 @@ class Perfil(ModeloCongelable, models.Model):
     Perfil genérico de un usuario (asegura que solo pueda tener un perfil -Estudiante, Profesor, etc.)
     """
     usuario = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='perfil')
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
 
     class Meta:
         db_table = 'Perfil'
@@ -51,7 +51,7 @@ class Estudiante(PerfilSuscriptor, Perfil):
     disponibilidad = models.CharField(choices=enums.DISPONIBILIDAD, max_length=20, blank=True, null=True)
 
     # Metadatos del estudiante
-    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD, max_length=20)
+    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD, default='privado', max_length=20)
 
     class Meta:
         db_table = 'Estudiante'
