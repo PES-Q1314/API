@@ -18,6 +18,11 @@ ESTADO_DE_LA_SUSCRIPCION = (
     ('descartada', 'Descartada')
 )
 
+ESTADO_DE_LA_CONGELACION = (
+    ('pendiente', 'Pendiente'),
+    ('resuelta', 'Resuelta')
+)
+
 NIVEL_DE_CONOCIMIENTO = (
     ('medio', 'Medio'),
     ('avanzado', 'Avanzado'),
