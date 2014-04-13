@@ -7,7 +7,7 @@ class Command(BaseCommand):
         from api.settings import INSTALLED_APPS
 
         for app in INSTALLED_APPS:
-            if app.startswith('django'):
+            if not app.startswith('apps'):
                 continue
 
             print("Populating app: %s" % app)

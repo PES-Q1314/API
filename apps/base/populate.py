@@ -1,10 +1,9 @@
 # coding=utf-8
-from apps.base.datos import departamentos, estudios
-from apps.base.datos.idiomas import ISO_639_1
+from apps.base.datos import departamentos, estudios, idiomas
 from apps.base.models import Idioma, ConocimientoTecnico, Departamento, Especialidad, SectorDelMercado
 
 # Introducimos todos los idiomas
-for idioma in ISO_639_1:
+for idioma in idiomas.ISO_639_1:
     Idioma.objects.create(codigo=idioma[0], idioma=idioma[1])
 
 

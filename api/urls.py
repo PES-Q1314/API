@@ -1,9 +1,16 @@
 from api.api import api
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.http import HttpResponse
+
+
+def home(request):
+    html = "<html><body>API: <a href='/api/'></a></body></html>"
+    return HttpResponse(html)
 
 
 urlpatterns = patterns('',
+    url(r'^$', home),
     url(r'^', include(api.urls))
 )
 
