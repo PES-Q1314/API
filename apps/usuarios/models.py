@@ -58,16 +58,16 @@ class Estudiante(PerfilSuscriptor, Perfil):
 
 
 class EstudianteTieneConocimientoTecnico(models.Model):
-    estudiante = models.ForeignKey(Estudiante)
+    estudiante = models.ForeignKey(Estudiante, related_name='conocimiento_tecnico_set')
     conocimiento = models.ForeignKey(ConocimientoTecnico)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
     class Meta:
         db_table = 'EstudianteTieneConocimientoTecnico'
 
-# TODO: Hacer que estas tablas sean recursos deshidratables desde el perfil
+
 class EstudianteTieneExperienciaLaboral(models.Model):
-    estudiante = models.ForeignKey(Estudiante)
+    estudiante = models.ForeignKey(Estudiante, related_name='experiencia_laboral_set')
     sector = models.ForeignKey(SectorDelMercado)
     meses = models.IntegerField()
 
@@ -76,7 +76,7 @@ class EstudianteTieneExperienciaLaboral(models.Model):
 
 
 class EstudianteHablaIdioma(models.Model):
-    estudiante = models.ForeignKey(Estudiante)
+    estudiante = models.ForeignKey(Estudiante, related_name='idioma_set')
     idioma = models.ForeignKey(Idioma)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 

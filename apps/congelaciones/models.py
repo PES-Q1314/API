@@ -18,7 +18,9 @@ class ModeloCongelable(models.Model):
 
     @property
     def ha_sido_modificado_tras_una_congelacion(self):
-        return self.fecha_de_ultima_congelacion < self.fecha_de_ultima_modificacion
+        ultima_congelacion = self.fecha_de_ultima_congelacion
+        ultima_modificacion = self.fecha_de_ultima_modificacion
+        return ultima_congelacion is not None and ultima_modificacion > ultima_congelacion
 
 
 class Congelacion(models.Model):

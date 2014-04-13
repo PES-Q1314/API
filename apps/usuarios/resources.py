@@ -1,54 +1,47 @@
 # coding=utf-8
 from apps.base.resources import ConocimientoTecnicoResource, SectorDelMercadoResource, IdiomaResource
 from apps.congelaciones.resources import RecursoCongelable
-from apps.usuarios.models import Estudiante, Profesor, Empresa
-from core.autorizaciones import AutorizacionDePerfil
-from core.resource import get_model_fields
+from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
+    EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma
+from core.resource import MetaGenerica
 from tastypie import fields
-from tastypie.authentication import SessionAuthentication
-from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
 
+class EstudianteTieneConocimientoTecnicoResource(ModelResource):
+    conocimiento = fields.ForeignKey(ConocimientoTecnicoResource, 'conocimiento', full=True)
+    Meta = MetaGenerica(modelo=EstudianteTieneConocimientoTecnico)
+
+
+class EstudianteTieneExperienciaLaboralResource(ModelResource):
+    sector = fields.ForeignKey(SectorDelMercadoResource, 'sector', full=True)
+    Meta = MetaGenerica(modelo=EstudianteTieneExperienciaLaboral)
+
+
+class EstudianteHablaIdiomaResource(ModelResource):
+    idioma = fields.ForeignKey(IdiomaResource, 'idioma', full=True)
+    Meta = MetaGenerica(modelo=EstudianteHablaIdioma)
+
+
 class EstudianteResource(RecursoCongelable, ModelResource):
-    conocimientos_tecnicos = fields.ToManyField(ConocimientoTecnicoResource,
-                                                'conocimientos_tecnicos', full=True)
-    experiencia_laboral = fields.ToManyField(SectorDelMercadoResource,
-                                             'experiencia_laboral', full=True)
-    idiomas = fields.ToManyField(IdiomaResource, 'idiomas', full=True)
+    conocimientos_tecnicos = fields.ToManyField(EstudianteTieneConocimientoTecnicoResource,
+                                                'conocimiento_tecnico_set', full=True)
+    experiencia_laboral = fields.ToManyField(EstudianteTieneExperienciaLaboralResource,
+                                             'experiencia_laboral_set', full=True)
+    idiomas = fields.ToManyField(EstudianteHablaIdiomaResource, 'idioma_set', full=True)
 
-
-    class Meta:
-        queryset = Estudiante.objects.all()
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get', 'patch']
-        authentication = SessionAuthentication()
-        authorization = AutorizacionDePerfil()
-
-        # TODO: Abstraer el filtrado y ordenado, así como authentication y authorization a una clase Meta genérica
-        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Estudiante)}
-        ordering = [f for f in get_model_fields(Estudiante)]
+    Meta = MetaGenerica(modelo=Estudiante)
+    Meta.list_allowed_methods = ['get']
+    Meta.detail_allowed_methods = ['get', 'patch']
 
 
 class ProfesorResource(RecursoCongelable, ModelResource):
-    class Meta:
-        queryset = Profesor.objects.all()
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get', 'patch']
-        authentication = SessionAuthentication()
-        authorization = AutorizacionDePerfil()
-
-        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Profesor)}
-        ordering = [f for f in get_model_fields(Profesor)]
+    Meta = MetaGenerica(modelo=Profesor)
+    Meta.list_allowed_methods = ['get']
+    Meta.detail_allowed_methods = ['get', 'patch']
 
 
 class EmpresaResource(RecursoCongelable, ModelResource):
-    class Meta:
-        queryset = Empresa.objects.all()
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get', 'put', 'patch', 'delete']
-        authentication = SessionAuthentication()
-        authorization = AutorizacionDePerfil()
-
-        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Empresa)}
-        ordering = [f for f in get_model_fields(Empresa)]
+    Meta = MetaGenerica(modelo=Empresa)
+    Meta.list_allowed_methods = ['get', 'post']
+    Meta.detail_allowed_methods = ['get', 'put', 'patch', 'delete']

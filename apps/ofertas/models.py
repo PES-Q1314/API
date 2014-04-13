@@ -46,7 +46,7 @@ class Oferta(ModeloCongelable, ModeloSuscribible, models.Model):
 
 
 class RequisitoDeConocimientoTecnico(models.Model):
-    oferta = models.ForeignKey(Oferta)
+    oferta = models.ForeignKey(Oferta, related_name='requisito_de_conocimiento_tecnico_set')
     conocimiento = models.ForeignKey(ConocimientoTecnico)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
@@ -55,7 +55,7 @@ class RequisitoDeConocimientoTecnico(models.Model):
 
 
 class RequisitoDeExperienciaLaboral(models.Model):
-    oferta = models.ForeignKey(Oferta)
+    oferta = models.ForeignKey(Oferta, related_name='requisito_de_experiencia_laboral_set')
     sector = models.ForeignKey(SectorDelMercado)
     meses = models.IntegerField()
 
@@ -64,7 +64,7 @@ class RequisitoDeExperienciaLaboral(models.Model):
 
 
 class RequisitoDeIdioma(models.Model):
-    oferta = models.ForeignKey(Oferta)
+    oferta = models.ForeignKey(Oferta, related_name='requisito_de_idioma_set')
     idioma = models.ForeignKey(Idioma)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
