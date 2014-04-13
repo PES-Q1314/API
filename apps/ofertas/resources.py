@@ -1,4 +1,5 @@
 from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, SectorDelMercadoResource
+from apps.congelaciones.resources import RecursoCongelable
 from apps.ofertas.models import OfertaDeEmpresa, Oferta
 from apps.suscripciones.resources import RecursoSuscribible
 from core.autorizaciones import AutorizacionDeAutor
@@ -13,7 +14,7 @@ from tastypie.resources import ModelResource
 
 
 
-class OfertaResource(RecursoSuscribible, ModelResource):
+class OfertaResource(RecursoCongelable, RecursoSuscribible, ModelResource):
     requisitos_de_conocimiento_tecnico = fields.ToManyField(ConocimientoTecnicoResource,
                                                             'requisitos_de_conocimiento_tecnico', full=True)
     requisitos_de_experiencia_laboral = fields.ToManyField(SectorDelMercadoResource,
@@ -21,7 +22,7 @@ class OfertaResource(RecursoSuscribible, ModelResource):
     requisitos_de_idioma = fields.ToManyField(IdiomaResource, 'requisitos_de_idioma', full=True)
 
     class Meta:
-        queryset = OfertaDeEmpresa.objects.all()
+        queryset = Oferta.objects.all()
         authentication = SessionAuthentication()
         authorization = AutorizacionDeAutor()
 

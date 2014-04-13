@@ -22,7 +22,10 @@ class Suscripcion(models.Model):
     # TODO: Abstraer perfiles que pueden suscribirse
     autor = models.ForeignKey(Estudiante, related_name='suscripciones')
     fecha = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION, max_length=20)
+    estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION, default='pendiente', max_length=20)
+
+    class Meta:
+        db_table = 'Suscripcion'
 
 
 

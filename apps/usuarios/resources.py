@@ -1,5 +1,6 @@
 # coding=utf-8
 from apps.base.resources import ConocimientoTecnicoResource, SectorDelMercadoResource, IdiomaResource
+from apps.congelaciones.resources import RecursoCongelable
 from apps.usuarios.models import Estudiante, Profesor, Empresa
 from core.autorizaciones import AutorizacionDePerfil
 from core.resource import get_model_fields
@@ -9,7 +10,7 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
 
-class EstudianteResource(ModelResource):
+class EstudianteResource(RecursoCongelable, ModelResource):
     conocimientos_tecnicos = fields.ToManyField(ConocimientoTecnicoResource,
                                                 'conocimientos_tecnicos', full=True)
     experiencia_laboral = fields.ToManyField(SectorDelMercadoResource,
@@ -29,7 +30,7 @@ class EstudianteResource(ModelResource):
         ordering = [f for f in get_model_fields(Estudiante)]
 
 
-class ProfesorResource(ModelResource):
+class ProfesorResource(RecursoCongelable, ModelResource):
     class Meta:
         queryset = Profesor.objects.all()
         list_allowed_methods = ['get']
@@ -41,7 +42,7 @@ class ProfesorResource(ModelResource):
         ordering = [f for f in get_model_fields(Profesor)]
 
 
-class EmpresaResource(ModelResource):
+class EmpresaResource(RecursoCongelable, ModelResource):
     class Meta:
         queryset = Empresa.objects.all()
         list_allowed_methods = ['get', 'post']
