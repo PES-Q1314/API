@@ -18,3 +18,7 @@
 # Ignore virtualenv
 venv/
 venv3/
+
+# Ignore ssh credentials
+id_rsa
+id_rsa.pub

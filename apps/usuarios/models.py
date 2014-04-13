@@ -48,10 +48,10 @@ class Estudiante(PerfilSuscriptor, Perfil):
 
     # Estado de búsqueda de trabajo
     busca_trabajo = models.BooleanField(default=False)
-    disponibilidad = models.CharField(choices=enums.DISPONIBILIDAD, max_length=20, blank=True, null=True)
+    disponibilidad = models.CharField(choices=enums.DISPONIBILIDAD, max_length=100, blank=True, null=True)
 
     # Metadatos del estudiante
-    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD, default='privado', max_length=20)
+    nivel_de_privacidad = models.CharField(choices=enums.NIVEL_DE_PRIVACIDAD, default='privado', max_length=100)
 
     class Meta:
         db_table = 'Estudiante'
@@ -60,7 +60,7 @@ class Estudiante(PerfilSuscriptor, Perfil):
 class EstudianteTieneConocimientoTecnico(models.Model):
     estudiante = models.ForeignKey(Estudiante, related_name='conocimiento_tecnico_set')
     conocimiento = models.ForeignKey(ConocimientoTecnico)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=100)
 
     class Meta:
         db_table = 'EstudianteTieneConocimientoTecnico'
@@ -78,7 +78,7 @@ class EstudianteTieneExperienciaLaboral(models.Model):
 class EstudianteHablaIdioma(models.Model):
     estudiante = models.ForeignKey(Estudiante, related_name='idioma_set')
     idioma = models.ForeignKey(Idioma)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=100)
 
     class Meta:
         db_table = 'EstudianteHablaIdioma'
@@ -98,7 +98,7 @@ class Empresa(Perfil):
     cif = models.CharField(max_length=9, unique=True)
     logotipo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     sector = models.ForeignKey(SectorDelMercado, blank=True, null=True)
-    tamanyo = models.CharField(choices=enums.TAMANYO_DE_EMPRESA, max_length=20, blank=True, null=True)
+    tamanyo = models.CharField(choices=enums.TAMANYO_DE_EMPRESA, max_length=100, blank=True, null=True)
     descripcion = models.TextField(blank=True, null=True)
 
     # Ubicación

@@ -1,16 +1,15 @@
 # coding=utf-8
-from apps.base.datos import departamentos, estudios
-from apps.base.datos.idiomas import ISO_639_1
+from apps.base.datos import departamentos, estudios, idiomas
 from apps.base.models import Idioma, ConocimientoTecnico, Departamento, Especialidad, SectorDelMercado
 
 # Introducimos todos los idiomas
-for idioma in ISO_639_1:
-    Idioma.objects.create(codigo=idioma[0], idioma=idioma[1])
+for idioma in idiomas.ISO_639_1:
+    Idioma.objects.get_or_create(codigo=idioma[0], idioma=idioma[1])
 
 
 # Introducimos todos los departamentos
 for dpt in departamentos.NOMBRES:
-    Departamento.objects.create(siglas=dpt[0], nombre=dpt[1], url_upc=departamentos.URL_UPC.format(dpt[2]))
+    Departamento.objects.create(nombre=dpt[0], siglas=dpt[1], url_upc=departamentos.URL_UPC.format(dpt[2]))
 
 # Introducimos todos los estudios
 for estudio in estudios.ESTUDIOS:

@@ -21,7 +21,7 @@ AUTH_USER_MODEL = 'cuentas.SystemUser'
 SECRET_KEY = '1vt2h1=g+@y=-zy6oiw$3n&dy3ap5m58@s&t5c9q9b*h)eb(rz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -93,13 +93,18 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
+
 # Tastypie settings
 TASTYPIE_DEFAULT_FORMATS = ['json']
 TASTYPIE_ALLOW_MISSING_SLASH = True
 
 
+# Parse database configuration from $DATABASE_URL
 if not DEBUG:
-    # Parse database configuration from $DATABASE_URL
     import dj_database_url
     DATABASES['default'] = dj_database_url.config()
 
@@ -117,4 +122,5 @@ if not DEBUG:
 
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'media'),
     )
