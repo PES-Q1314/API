@@ -10,13 +10,13 @@ from django.db import models
 class Oferta(ModeloCongelable, ModeloSuscribible, models.Model):
     # Características de la oferta
 
-    titulo = models.CharField(max_length=50)
+    titulo = models.CharField(max_length=100)
     descripcion = models.TextField(max_length=600)
-    puesto = models.CharField(max_length=40, blank=True, null=True)
+    puesto = models.CharField(max_length=150, blank=True, null=True)
     meses_de_duracion = models.IntegerField(blank=True, null=True)
     fecha_de_incorporacion = models.DateField()
     numero_de_puestos_vacantes = models.IntegerField()
-    horario = models.CharField(choices=enums.HORARIO_DE_TRABAJO, max_length=20)
+    horario = models.CharField(choices=enums.HORARIO_DE_TRABAJO, max_length=50)
 
     especialidades = models.ManyToManyField(Especialidad, related_name='none+')
     ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO, blank=True, null=True)
@@ -48,7 +48,7 @@ class Oferta(ModeloCongelable, ModeloSuscribible, models.Model):
 class RequisitoDeConocimientoTecnico(models.Model):
     oferta = models.ForeignKey(Oferta, related_name='requisito_de_conocimiento_tecnico_set')
     conocimiento = models.ForeignKey(ConocimientoTecnico)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=50)
 
     class Meta:
         db_table = 'RequisitoDeConocimientoTecnico'
@@ -66,7 +66,7 @@ class RequisitoDeExperienciaLaboral(models.Model):
 class RequisitoDeIdioma(models.Model):
     oferta = models.ForeignKey(Oferta, related_name='requisito_de_idioma_set')
     idioma = models.ForeignKey(Idioma)
-    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
+    nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=50)
 
     class Meta:
         db_table = 'RequisitoDeIdioma'

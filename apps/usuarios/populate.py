@@ -27,7 +27,7 @@ for u in grupo[0]:
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
         'busca_trabajo': True,
         'disponibilidad': enums.DISPONIBILIDAD[0][0],
-        'nivel_de_privacidad': enums.NIVEL_DE_PRIVACIDAD
+        'nivel_de_privacidad': enums.NIVEL_DE_PRIVACIDAD[0][0]
     }
     est = Estudiante.objects.create(**datos)
 
