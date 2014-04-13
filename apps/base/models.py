@@ -15,7 +15,7 @@ class Idioma(models.Model):
 
 
 class ConocimientoTecnico(models.Model):
-    conocimiento = models.CharField(max_length=100, unique=True)
+    conocimiento = models.CharField(max_length=300, unique=True)
 
     class Meta:
         db_table = 'ConocimientoTecnico'
@@ -30,7 +30,7 @@ class SectorDelMercado(models.Model):
 
 class Departamento(models.Model):
     siglas = models.CharField(max_length=20)
-    nombre = models.CharField(max_length=150)
+    nombre = models.CharField(max_length=350)
     url_upc = models.URLField()
 
     class Meta:
@@ -39,8 +39,8 @@ class Departamento(models.Model):
 
 
 class Especialidad(models.Model):
-    nombre = models.CharField(max_length=150)
-    facultad = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=350)
+    facultad = models.CharField(max_length=200)
     url_upc = models.URLField()
 
     class Meta:
