@@ -19,7 +19,8 @@ class Suscripcion(models.Model):
     object_id = models.PositiveIntegerField()
     modelo = GenericForeignKey()
 
-    estudiante = models.ForeignKey(Estudiante, related_name='suscripciones')
+    # TODO: Abstraer perfiles que pueden suscribirse
+    autor = models.ForeignKey(Estudiante, related_name='suscripciones')
     fecha = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION, max_length=20)
 

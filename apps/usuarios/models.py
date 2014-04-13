@@ -51,7 +51,7 @@ class XConocimientoTecnico(models.Model):
     conocimiento = models.ForeignKey(ConocimientoTecnico)
     nivel = models.CharField(choices=enums.NIVEL_DE_CONOCIMIENTO, max_length=20)
 
-
+# TODO: Hacer que estas tablas sean recursos deshidratables desde el perfil
 class XExperienciaLaboral(models.Model):
     estudiante = models.ForeignKey(Estudiante)
     sector = models.ForeignKey(SectorDelMercado)

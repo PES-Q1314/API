@@ -7,7 +7,7 @@ from django.db import models
 
 
 class Oferta(ModeloSuscribible, models.Model):
-    #Características de la oferta
+    # Características de la oferta
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField(max_length=600)
     meses_de_duracion = models.IntegerField()
