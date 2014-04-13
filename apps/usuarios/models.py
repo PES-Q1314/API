@@ -26,11 +26,11 @@ class Perfil(ModeloCongelable, models.Model):
 
 class Estudiante(PerfilSuscriptor, Perfil):
     # Información personal
-    dni = models.CharField(max_length=9)
+    dni = models.CharField(max_length=9, unique=True)
     fecha_de_nacimiento = models.DateField()
     foto_de_perfil = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     sexo = models.CharField(max_length=1, choices=enums.SEXO)
-    telefono = models.CharField(max_length=9, blank=True, null=True)
+    telefono = models.CharField(max_length=9, unique=True, blank=True, null=True)
 
     # Residencia
     direccion = models.CharField(max_length=200)
@@ -85,7 +85,7 @@ class EstudianteHablaIdioma(models.Model):
 
 
 class Profesor(Perfil):
-    url_upc = models.URLField()
+    url_upc = models.URLField(unique=True)
     foto_de_perfil = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     departamento = models.ForeignKey(Departamento)
 
@@ -95,7 +95,7 @@ class Profesor(Perfil):
 
 class Empresa(Perfil):
     # Información de la empresa
-    cif = models.CharField(max_length=9)
+    cif = models.CharField(max_length=9, unique=True)
     logotipo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     sector = models.ForeignKey(SectorDelMercado, blank=True, null=True)
     tamanyo = models.CharField(choices=enums.TAMANYO_DE_EMPRESA, max_length=20, blank=True, null=True)
