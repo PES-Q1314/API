@@ -93,13 +93,18 @@ STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 
+# Media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_URL = '/media/'
+
+
 # Tastypie settings
 TASTYPIE_DEFAULT_FORMATS = ['json']
 TASTYPIE_ALLOW_MISSING_SLASH = True
 
 
+# Parse database configuration from $DATABASE_URL
 if not DEBUG:
-    # Parse database configuration from $DATABASE_URL
     import dj_database_url
     DATABASES['default'] = dj_database_url.config()
 
@@ -117,4 +122,5 @@ if not DEBUG:
 
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, 'static'),
+        os.path.join(BASE_DIR, 'media'),
     )

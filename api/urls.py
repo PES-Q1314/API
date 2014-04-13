@@ -8,8 +8,9 @@ urlpatterns = patterns('',
 )
 
 
-# When DEBUG=True, it is Django that serves static files
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT})
-    )
+urlpatterns += patterns('',
+                        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+                         {'document_root': settings.MEDIA_ROOT, 'show_indexes': True, }),
+                        (r'^static/(?P<path>.*)$', 'django.views.static.serve',
+                         {'document_root': settings.STATIC_ROOT, 'show_indexes': True, }),
+)
