@@ -1,6 +1,6 @@
 # coding=utf-8
 from apps.base import enums
-from apps.base.models import ConocimientoTecnico, SectorDelMercado, Idioma
+from apps.base.models import ConocimientoTecnico, SectorDelMercado, Idioma, Especialidad
 from apps.congelaciones.models import ModeloCongelable
 from apps.suscripciones.models import ModeloSuscribible
 from apps.usuarios.models import Empresa, Profesor, Estudiante, Perfil
@@ -12,10 +12,14 @@ class Oferta(ModeloCongelable, ModeloSuscribible, models.Model):
 
     titulo = models.CharField(max_length=50)
     descripcion = models.TextField(max_length=600)
+    puesto = models.CharField(max_length=40, blank=True, null=True)
     meses_de_duracion = models.IntegerField(blank=True, null=True)
     fecha_de_incorporacion = models.DateField()
     numero_de_puestos_vacantes = models.IntegerField()
     horario = models.CharField(choices=enums.HORARIO_DE_TRABAJO, max_length=20)
+
+    especialidades = models.ManyToManyField(Especialidad, related_name='none+')
+    ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO, blank=True, null=True)
     requisitos_de_conocimiento_tecnico = models.ManyToManyField(ConocimientoTecnico,
                                                                 through='RequisitoDeConocimientoTecnico')
     requisitos_de_experiencia_laboral = models.ManyToManyField(SectorDelMercado, through='RequisitoDeExperienciaLaboral')
@@ -70,7 +74,6 @@ class RequisitoDeIdioma(models.Model):
 
 class OfertaDeEmpresa(Oferta):
     autor = models.ForeignKey(Empresa)
-    ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO, blank=True, null=True)
     hay_posibilidad_de_tfg = models.BooleanField()
     salario_mensual = models.IntegerField(blank=True, null=True)
     persona_de_contacto = models.CharField(max_length=100, blank=True, null=True)

@@ -10,6 +10,14 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
 
+class MetaGenerica(object):
+    MODELO = None
+    queryset = MODELO.objects.all()
+    authentication = SessionAuthentication()
+    filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(MODELO)}
+    ordering = [f for f in get_model_fields(MODELO)]
+
+
 class EstudianteResource(RecursoCongelable, ModelResource):
     conocimientos_tecnicos = fields.ToManyField(ConocimientoTecnicoResource,
                                                 'conocimientos_tecnicos', full=True)

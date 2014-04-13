@@ -34,3 +34,12 @@ class Departamento(models.Model):
 
     class Meta:
         db_table = 'Departamento'
+
+
+class Especialidad(models.Model):
+    nombre = models.CharField(max_length=50)
+    facultad = models.CharField(max_length=50)
+    url_upc = models.URLField()
+
+    class Meta:
+        db_table = 'Especialidad'

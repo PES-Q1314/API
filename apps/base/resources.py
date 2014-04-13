@@ -1,8 +1,9 @@
 # coding=utf-8
-from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento
+from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento, Especialidad
+from core.resource import get_model_fields
 from tastypie import fields
 from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import Authorization
+from tastypie.authorization import Authorization, ReadOnlyAuthorization
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
@@ -16,7 +17,7 @@ class IdiomaResource(ModelResource):
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
         authentication = SessionAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
 
         filtering = {
             'codigo': ALL,
@@ -71,7 +72,7 @@ class DepartamentoResource(ModelResource):
         list_allowed_methods = ['get']
         detail_allowed_methods = ['get']
         authentication = SessionAuthentication()
-        authorization = Authorization()
+        authorization = ReadOnlyAuthorization()
 
         filtering = {
             'siglas': ALL,
@@ -79,3 +80,18 @@ class DepartamentoResource(ModelResource):
         }
 
         ordering = ['siglas', 'nombre']
+
+
+class EspecialidadResource(ModelResource):
+
+    class Meta:
+        queryset = Especialidad.objects.all()
+
+        # Hay un conjunto fijo de especialidades, y solo se puede consultar
+        list_allowed_methods = ['get']
+        detail_allowed_methods = ['get']
+        authentication = SessionAuthentication()
+        authorization = ReadOnlyAuthorization()
+
+        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Especialidad)}
+        ordering = [f for f in get_model_fields(Especialidad)]

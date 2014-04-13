@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 from api import settings
 from apps.base import enums
-from apps.base.models import Departamento, ConocimientoTecnico, SectorDelMercado, Idioma
+from apps.base.models import Departamento, ConocimientoTecnico, SectorDelMercado, Idioma, Especialidad
 from apps.congelaciones.models import ModeloCongelable
+from apps.suscripciones.models import PerfilSuscriptor
 from django.db import models
 
 import os
 
-# TODO: Mejorar este modelo para abstraer el nombre del modelo y poder usar el mismo método en todas
+
 def get_image_path(instance, filename):
-    return os.path.join('estudiante', str(instance.id), filename)
+    return os.path.join(instance.__class__.__name__, str(instance.id), filename)
 
 
 class Perfil(ModeloCongelable, models.Model):
@@ -23,7 +24,7 @@ class Perfil(ModeloCongelable, models.Model):
         db_table = 'Perfil'
 
 
-class Estudiante(Perfil):
+class Estudiante(PerfilSuscriptor, Perfil):
     # Información personal
     dni = models.CharField(max_length=9)
     fecha_de_nacimiento = models.DateField()
@@ -37,7 +38,7 @@ class Estudiante(Perfil):
     longitud = models.FloatField()
 
     # Currículo
-    # TODO: incluir en los perfiles y en otras partes del proyecto los estudios cursados por la persona
+    especialidad = models.ForeignKey(Especialidad)
     ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO)
     descripcion = models.TextField(blank=True, null=True)
     conocimientos_tecnicos = models.ManyToManyField(ConocimientoTecnico,

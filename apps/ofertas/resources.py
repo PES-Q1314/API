@@ -1,4 +1,5 @@
-from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, SectorDelMercadoResource
+from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, SectorDelMercadoResource, \
+    EspecialidadResource
 from apps.congelaciones.resources import RecursoCongelable
 from apps.ofertas.models import OfertaDeEmpresa, Oferta
 from apps.suscripciones.resources import RecursoSuscribible
@@ -12,9 +13,8 @@ from tastypie.resources import ModelResource
 
 
 
-
-
 class OfertaResource(RecursoCongelable, RecursoSuscribible, ModelResource):
+    especialidades = fields.ToManyField(EspecialidadResource, 'especialidades', full=True)
     requisitos_de_conocimiento_tecnico = fields.ToManyField(ConocimientoTecnicoResource,
                                                             'requisitos_de_conocimiento_tecnico', full=True)
     requisitos_de_experiencia_laboral = fields.ToManyField(SectorDelMercadoResource,
