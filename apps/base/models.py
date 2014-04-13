@@ -29,7 +29,7 @@ class SectorDelMercado(models.Model):
 
 
 class Departamento(models.Model):
-    siglas = models.CharField(max_length=6)
+    siglas = models.CharField(max_length=10)
     nombre = models.CharField(max_length=50)
     url_upc = models.URLField()
 
