@@ -1,97 +1,31 @@
 # coding=utf-8
 from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento, Especialidad
-from core.resource import get_model_fields
-from tastypie import fields
-from tastypie.authentication import SessionAuthentication, Authentication
-from tastypie.authorization import Authorization, ReadOnlyAuthorization
-from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from core.resource import MetaGenerica
 from tastypie.resources import ModelResource
 
 
 class IdiomaResource(ModelResource):
-
-    class Meta:
-        queryset = Idioma.objects.all()
-
-        # Hay un conjunto fijo de idiomas, y solo se puede consultar
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
-        authentication = Authentication()
-        authorization = ReadOnlyAuthorization()
-
-        filtering = {
-            'codigo': ALL,
-            'idioma': ALL
-        }
-
-        ordering = ['codigo', 'idioma']
+    Meta = MetaGenerica(modelo=Idioma)
+    Meta.allowed_methods = ['get']
 
 
 class ConocimientoTecnicoResource(ModelResource):
-
-    class Meta:
-        queryset = ConocimientoTecnico.objects.all()
-
-        # No puede borrarse un conocimiento ya introducido. Todos pueden consultarse libremente
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = Authorization()
-
-        filtering = {
-            'conocimiento': ALL
-        }
-
-        ordering = ['conocimiento']
+    Meta = MetaGenerica(modelo=ConocimientoTecnico)
+    Meta.list_allowed_methods = ['get', 'post']
+    Meta.detail_allowed_methods = ['get']
 
 
 class SectorDelMercadoResource(ModelResource):
-
-    class Meta:
-        queryset = SectorDelMercado.objects.all()
-
-        # No puede borrarse un sector ya introducido. Todos pueden consultarse libremente
-        list_allowed_methods = ['get', 'post']
-        detail_allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = Authorization()
-
-        filtering = {
-            'sector': ALL
-        }
-
-        ordering = ['sector']
+    Meta = MetaGenerica(modelo=SectorDelMercado)
+    Meta.list_allowed_methods = ['get', 'post']
+    Meta.detail_allowed_methods = ['get']
 
 
 class DepartamentoResource(ModelResource):
-
-    class Meta:
-        queryset = Departamento.objects.all()
-
-        # Hay un conjunto fijo de departamentos, y solo se puede consultar
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = ReadOnlyAuthorization()
-
-        filtering = {
-            'siglas': ALL,
-            'nombre': ALL
-        }
-
-        ordering = ['siglas', 'nombre']
+    Meta = MetaGenerica(modelo=Departamento)
+    Meta.allowed_methods = ['get']
 
 
 class EspecialidadResource(ModelResource):
-
-    class Meta:
-        queryset = Especialidad.objects.all()
-
-        # Hay un conjunto fijo de especialidades, y solo se puede consultar
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = ReadOnlyAuthorization()
-
-        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Especialidad)}
-        ordering = [f for f in get_model_fields(Especialidad)]
+    Meta = MetaGenerica(modelo=Especialidad)
+    Meta.allowed_methods = ['get']

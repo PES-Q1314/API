@@ -1,7 +1,7 @@
 # coding=utf-8
 from apps.congelaciones.models import Congelacion
 from apps.suscripciones.models import Suscripcion
-from core.resource import get_model_fields
+from core.resource import get_model_fields, MetaGenerica
 from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
@@ -10,13 +10,7 @@ from tastypie.resources import ModelResource
 
 
 class CongelacionResource(ModelResource):
-    class Meta:
-        queryset = Congelacion.objects.all()
-        authentication = SessionAuthentication()
-        authorization = Authorization()
-
-        filtering = {f: ALL_WITH_RELATIONS for f in get_model_fields(Congelacion)}
-        ordering = [f for f in get_model_fields(Congelacion)]
+    Meta = MetaGenerica(modelo=Congelacion)
 
 
 class RecursoCongelable(ModelResource):

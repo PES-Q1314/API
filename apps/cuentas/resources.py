@@ -37,6 +37,7 @@ class SystemUserAuthorization(Authorization):
 
 
 class SystemUserResource(ActionResourceMixin, ModelResource):
+
     class Meta:
         queryset = SystemUser.objects.all()
         excludes = ['password']
