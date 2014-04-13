@@ -4,8 +4,7 @@ from apps.base.models import Idioma, ConocimientoTecnico, Departamento, Especial
 
 # Introducimos todos los idiomas
 for idioma in idiomas.ISO_639_1:
-    print('a')
-    Idioma.objects.create(codigo=idioma[0], idioma=idioma[1])
+    Idioma.objects.get_or_create(codigo=idioma[0], idioma=idioma[1])
 
 
 # Introducimos todos los departamentos
