@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 
 def home(request):
-    html = "<html><body>API: <a href='/api/'></a></body></html>"
+    html = "<html><body>Para ver la API, dirigirse a: <a href='/api/'>/api/</a></body></html>"
     return HttpResponse(html)
 
 
