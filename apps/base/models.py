@@ -6,7 +6,7 @@ from django.db import models
 
 class Idioma(models.Model):
     """ Idioma, siguiendo la ISO 639-1 """
-    codigo = models.CharField(max_length=2, choices=ISO_639_1)
+    codigo = models.CharField(max_length=2)
     idioma = models.CharField(max_length=50)
 
     class Meta:
