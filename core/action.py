@@ -1,4 +1,4 @@
-from inspect import getargspec
+from inspect import signature, getmembers
 import json
 from functools import wraps
 from django.conf.urls import url
@@ -37,7 +37,7 @@ def action(name=None, url=None, static=False, allowed=None, login_required=False
         wrapper.action_name = name
         wrapper.action_url = url
         wrapper.allowed_methods = allowed
-        wrapper.expected_data = list(getargspec(func).args)
+        wrapper.expected_data = list(signature(func).parameters.values())[2:]
         wrapper.responses = getattr(func, 'responses', {})
         return wrapper
 
@@ -67,7 +67,7 @@ class ActionResourceMixin(object):
         return actions
 
     def prepend_urls(self):
-        urls = super(ActionResourceMixin, self).prepend_urls()
+        urls = super().prepend_urls()
         action_methods = self._get_actions()
 
         for name, method in action_methods:
@@ -113,10 +113,10 @@ class ActionResourceMixin(object):
         if isinstance(exception, TypeError):
             return HttpBadRequest()
 
-        return super(ActionResourceMixin, self)._handle_500(request, exception)
+        return super()._handle_500(request, exception)
 
     def build_schema(self):
-        data = super(ActionResourceMixin, self).build_schema()
+        data = super().build_schema()
 
         action_methods = self._get_actions()
         actions = []
