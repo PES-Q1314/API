@@ -14,6 +14,7 @@ class ModeloDenunciable(models.Model):
 
 class PerfilDenunciante(models.Model):
     denuncias = GenericRelation('Denuncia', content_type_field='denunciante_ct', object_id_field='denunciante_oid')
+    notificar_cambio_de_estado_de_la_denuncia = models.BooleanField(default=True)
 
     class Meta:
         abstract = True

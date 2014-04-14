@@ -15,6 +15,11 @@ class ModeloSuscribible(models.Model):
 class PerfilSuscriptor(models.Model):
     suscripciones = GenericRelation('Suscripcion', content_type_field='suscriptor_ct', object_id_field='suscriptor_oid')
 
+    # Notificaciones relacionadas con modelos suscribibles
+    notificar_cambio_de_estado_de_la_suscripcion = models.BooleanField(default=True)
+    recibe_el_boletin_semanal = models.BooleanField(default=True)
+    recibe_ofertas_personalizadas = models.BooleanField(default=True)
+
     class Meta:
         abstract = True
 
