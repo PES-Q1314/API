@@ -13,7 +13,7 @@ class ModeloSuscribible(models.Model):
 
 
 class PerfilSuscriptor(models.Model):
-    suscripciones = GenericRelation('Suscripcion', content_type_field='autor_ct', object_id_field='autor_oid')
+    suscripciones = GenericRelation('Suscripcion', content_type_field='suscriptor_ct', object_id_field='suscriptor_oid')
 
     class Meta:
         abstract = True
@@ -21,14 +21,14 @@ class PerfilSuscriptor(models.Model):
 
 class Suscripcion(models.Model):
     # Apuntador genérico a Modelos Suscribibles
-    modelo_ct = models.ForeignKey(ContentType, related_name='modelo_suscripciones')
+    modelo_ct = models.ForeignKey(ContentType, related_name='none+')
     modelo_oid = models.PositiveIntegerField()
     modelo = GenericForeignKey('modelo_ct', 'modelo_oid')
 
     # Apuntador genérico a Perfiles Suscriptores
-    autor_ct = models.ForeignKey(ContentType, related_name='autor_suscripciones')
-    autor_oid = models.PositiveIntegerField()
-    autor = GenericForeignKey('autor_ct', 'autor_oid')
+    suscriptor_ct = models.ForeignKey(ContentType, related_name='none+')
+    suscriptor_oid = models.PositiveIntegerField()
+    suscriptor = GenericForeignKey('suscriptor_ct', 'suscriptor_oid')
 
     fecha = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(choices=enums.ESTADO_DE_LA_SUSCRIPCION, default='pendiente', max_length=20)

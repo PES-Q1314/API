@@ -14,7 +14,7 @@ class CongelacionResource(ModelResource):
 
 
 class RecursoCongelable(ModelResource):
-    congelaciones = fields.ToManyField(CongelacionResource, 'congelaciones', null=True)
+    congelaciones = fields.ToManyField(CongelacionResource, 'congelaciones', full=True)
     modificado_tras_una_congelacion = fields.BooleanField()
 
     def dehydrate_modificado_tras_una_congelacion(self, bundle):

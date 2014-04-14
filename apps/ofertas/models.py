@@ -2,14 +2,14 @@
 from apps.base import enums
 from apps.base.models import ConocimientoTecnico, SectorDelMercado, Idioma, Especialidad
 from apps.congelaciones.models import ModeloCongelable
+from apps.denuncias.models import ModeloDenunciable
 from apps.suscripciones.models import ModeloSuscribible
 from apps.usuarios.models import Empresa, Profesor, Estudiante, Perfil
 from django.db import models
 
 
-class Oferta(ModeloCongelable, ModeloSuscribible, models.Model):
+class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Model):
     # Características de la oferta
-
     titulo = models.CharField(max_length=100)
     descripcion = models.TextField(max_length=600)
     puesto = models.CharField(max_length=150, blank=True, null=True)

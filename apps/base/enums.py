@@ -23,6 +23,12 @@ ESTADO_DE_LA_CONGELACION = (
     ('resuelta', 'Resuelta')
 )
 
+ESTADO_DE_LA_DENUNCIA = (
+    ('pendiente', 'Pendiente'),
+    ('resuelta', 'Resuelta'),
+    ('desestimada', 'Desestimada')
+)
+
 NIVEL_DE_CONOCIMIENTO = (
     ('medio', 'Medio'),
     ('avanzado', 'Avanzado'),

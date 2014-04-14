@@ -1,15 +1,12 @@
 from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, SectorDelMercadoResource, \
     EspecialidadResource
 from apps.congelaciones.resources import RecursoCongelable
-from apps.ofertas.models import OfertaDeEmpresa, Oferta, RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, \
+from apps.denuncias.resources import RecursoDenunciable
+from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, \
     RequisitoDeIdioma, OfertaDeProyectoEmprendedor, OfertaDeDepartamento
 from apps.suscripciones.resources import RecursoSuscribible
-from core.autorizaciones import AutorizacionDeAutor
-from core.resource import get_model_fields, MetaGenerica
+from core.resource import MetaGenerica
 from tastypie import fields
-from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import Authorization
-from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from tastypie.resources import ModelResource
 
 
@@ -28,7 +25,7 @@ class RequisitoDeIdiomaResource(ModelResource):
     Meta = MetaGenerica(modelo=RequisitoDeIdioma)
 
 
-class RecursoOfertaGenerica(RecursoCongelable, RecursoSuscribible, ModelResource):
+class RecursoOfertaGenerica(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, ModelResource):
     especialidades = fields.ToManyField(EspecialidadResource, 'especialidades', full=True)
     requisitos_de_conocimiento_tecnico = fields.ToManyField(RequisitoDeConocimientoTecnicoResource,
                                                             'requisito_de_conocimiento_tecnico_set', full=True)

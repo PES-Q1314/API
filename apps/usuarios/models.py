@@ -3,6 +3,7 @@ from api import settings
 from apps.base import enums
 from apps.base.models import Departamento, ConocimientoTecnico, SectorDelMercado, Idioma, Especialidad
 from apps.congelaciones.models import ModeloCongelable
+from apps.denuncias.models import ModeloDenunciable, PerfilDenunciante
 from apps.suscripciones.models import PerfilSuscriptor
 from django.db import models
 
@@ -13,7 +14,7 @@ def get_image_path(instance, filename):
     return os.path.join(instance.__class__.__name__, str(instance.id), filename)
 
 
-class Perfil(ModeloCongelable, models.Model):
+class Perfil(ModeloDenunciable, ModeloCongelable, models.Model):
     """
     Perfil genérico de un usuario (asegura que solo pueda tener un perfil -Estudiante, Profesor, etc.)
     """
@@ -24,7 +25,7 @@ class Perfil(ModeloCongelable, models.Model):
         db_table = 'Perfil'
 
 
-class Estudiante(PerfilSuscriptor, Perfil):
+class Estudiante(PerfilSuscriptor, PerfilDenunciante, Perfil):
     # Información personal
     dni = models.CharField(max_length=9, unique=True)
     fecha_de_nacimiento = models.DateField()

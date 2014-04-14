@@ -1,6 +1,8 @@
 # coding=utf-8
 from apps.base.resources import ConocimientoTecnicoResource, SectorDelMercadoResource, IdiomaResource
 from apps.congelaciones.resources import RecursoCongelable
+from apps.denuncias.resources import RecursoDenunciable
+from apps.suscripciones.resources import RecursoSuscritor
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
     EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma
 from core.resource import MetaGenerica
@@ -23,7 +25,7 @@ class EstudianteHablaIdiomaResource(ModelResource):
     Meta = MetaGenerica(modelo=EstudianteHablaIdioma)
 
 
-class EstudianteResource(RecursoCongelable, ModelResource):
+class EstudianteResource(RecursoDenunciable, RecursoCongelable, ModelResource):
     conocimientos_tecnicos = fields.ToManyField(EstudianteTieneConocimientoTecnicoResource,
                                                 'conocimiento_tecnico_set', full=True)
     experiencia_laboral = fields.ToManyField(EstudianteTieneExperienciaLaboralResource,
@@ -35,13 +37,13 @@ class EstudianteResource(RecursoCongelable, ModelResource):
     Meta.detail_allowed_methods = ['get', 'patch']
 
 
-class ProfesorResource(RecursoCongelable, ModelResource):
+class ProfesorResource(RecursoDenunciable, RecursoCongelable, ModelResource):
     Meta = MetaGenerica(modelo=Profesor)
     Meta.list_allowed_methods = ['get']
     Meta.detail_allowed_methods = ['get', 'patch']
 
 
-class EmpresaResource(RecursoCongelable, ModelResource):
+class EmpresaResource(RecursoDenunciable, RecursoCongelable, ModelResource):
     Meta = MetaGenerica(modelo=Empresa)
     Meta.list_allowed_methods = ['get', 'post']
     Meta.detail_allowed_methods = ['get', 'put', 'patch', 'delete']

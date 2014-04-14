@@ -25,7 +25,7 @@ class ModeloCongelable(models.Model):
 
 class Congelacion(models.Model):
     # Apuntador genérico a Modelos Congelables
-    content_type = models.ForeignKey(ContentType)
+    content_type = models.ForeignKey(ContentType, related_name='none+')
     object_id = models.PositiveIntegerField()
     modelo = GenericForeignKey()
 
