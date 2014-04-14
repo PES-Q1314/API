@@ -12,6 +12,11 @@ DISPONIBILIDAD = HORARIO_DE_TRABAJO = (
     ('total', 'total')
 )
 
+JORNADA_LABORAL = (
+    ('parcial', 'Parcial'),
+    ('total', 'Total')
+)
+
 ESTADO_DE_LA_SUSCRIPCION = (
     ('pendiente', 'Pendiente'),
     ('aceptada', 'Aceptada'),

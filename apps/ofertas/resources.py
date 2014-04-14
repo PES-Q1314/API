@@ -5,6 +5,7 @@ from apps.denuncias.resources import RecursoDenunciable
 from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, \
     RequisitoDeIdioma, OfertaDeProyectoEmprendedor, OfertaDeDepartamento
 from apps.suscripciones.resources import RecursoSuscribible
+from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource
 from core.resource import MetaGenerica
 from tastypie import fields
 from tastypie.resources import ModelResource
@@ -35,14 +36,17 @@ class RecursoOfertaGenerica(RecursoDenunciable, RecursoCongelable, RecursoSuscri
 
 
 class OfertaDeEmpresaResource(RecursoOfertaGenerica):
+    autor = fields.ForeignKey(EmpresaResource, 'autor')
     Meta = MetaGenerica(modelo=OfertaDeEmpresa)
 
 
 class OfertaDeDepartamentoResource(RecursoOfertaGenerica):
+    autor = fields.ForeignKey(ProfesorResource, 'autor')
     Meta = MetaGenerica(modelo=OfertaDeDepartamento)
 
 
 class OfertaDeProyectoEmprendedorResource(RecursoOfertaGenerica):
+    autor = fields.ForeignKey(EstudianteResource, 'autor')
     Meta = MetaGenerica(modelo=OfertaDeProyectoEmprendedor)
 
 

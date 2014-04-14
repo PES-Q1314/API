@@ -17,6 +17,7 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
     fecha_de_incorporacion = models.DateField()
     numero_de_puestos_vacantes = models.IntegerField()
     horario = models.CharField(choices=enums.HORARIO_DE_TRABAJO, max_length=50)
+    tipo_de_jornada = models.CharField(choices=enums.JORNADA_LABORAL, max_length=50)
 
     especialidades = models.ManyToManyField(Especialidad, related_name='none+')
     ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO, blank=True, null=True)
@@ -37,12 +38,6 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
     class Meta:
         db_table = 'Oferta'
 
-    @property
-    def tipo_de_jornada(self):
-        if self.horario == 'total':
-            return 'completa'
-        else:
-            return 'parcial'
 
 
 class RequisitoDeConocimientoTecnico(models.Model):

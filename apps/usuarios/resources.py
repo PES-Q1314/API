@@ -2,7 +2,6 @@
 from apps.base.resources import ConocimientoTecnicoResource, SectorDelMercadoResource, IdiomaResource
 from apps.congelaciones.resources import RecursoCongelable
 from apps.denuncias.resources import RecursoDenunciable
-from apps.suscripciones.resources import RecursoSuscritor
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
     EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma
 from core.resource import MetaGenerica
