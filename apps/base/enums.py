@@ -12,6 +12,11 @@ DISPONIBILIDAD = HORARIO_DE_TRABAJO = (
     ('total', 'total')
 )
 
+JORNADA_LABORAL = (
+    ('parcial', 'Parcial'),
+    ('total', 'Total')
+)
+
 ESTADO_DE_LA_SUSCRIPCION = (
     ('pendiente', 'Pendiente'),
     ('aceptada', 'Aceptada'),
@@ -21,6 +26,12 @@ ESTADO_DE_LA_SUSCRIPCION = (
 ESTADO_DE_LA_CONGELACION = (
     ('pendiente', 'Pendiente'),
     ('resuelta', 'Resuelta')
+)
+
+ESTADO_DE_LA_DENUNCIA = (
+    ('pendiente', 'Pendiente'),
+    ('resuelta', 'Resuelta'),
+    ('desestimada', 'Desestimada')
 )
 
 NIVEL_DE_CONOCIMIENTO = (

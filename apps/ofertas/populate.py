@@ -15,6 +15,7 @@ for i in range(50):
         'fecha_de_incorporacion': date.today(),
         'numero_de_puestos_vacantes': 4,
         'horario': enums.HORARIO_DE_TRABAJO[0][0],
+        'tipo_de_jornada': enums.JORNADA_LABORAL[1][0],
         'ultimo_curso_academico_superado': enums.CURSO_ACADEMICO[0][0],
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,

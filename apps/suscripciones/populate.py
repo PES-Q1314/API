@@ -9,4 +9,4 @@ ofertas = list(Oferta.objects.all())
 
 for i, est in enumerate(estudiantes):
     for j in range(10):
-        Suscripcion.objects.create(autor=est, modelo=ofertas[(i*5+j) % len(ofertas)])
+        Suscripcion.objects.create(suscriptor=est, modelo=ofertas[(i*5+j) % len(ofertas)])

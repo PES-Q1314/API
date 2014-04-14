@@ -1,30 +1,36 @@
 # -*- coding: utf-8 -*-
+import datetime
 from api import settings
 from apps.base import enums
 from apps.base.models import Departamento, ConocimientoTecnico, SectorDelMercado, Idioma, Especialidad
 from apps.congelaciones.models import ModeloCongelable
+from apps.denuncias.models import ModeloDenunciable, PerfilDenunciante
+from apps.lista_negra.models import ModeloIncluibleEnLaListaNegra
 from apps.suscripciones.models import PerfilSuscriptor
 from django.db import models
 
 import os
+from model_utils.managers import InheritanceManager
 
 
 def get_image_path(instance, filename):
     return os.path.join(instance.__class__.__name__, str(instance.id), filename)
 
 
-class Perfil(ModeloCongelable, models.Model):
+class Perfil(ModeloDenunciable, ModeloCongelable, models.Model):
     """
     Perfil genérico de un usuario (asegura que solo pueda tener un perfil -Estudiante, Profesor, etc.)
     """
     usuario = models.OneToOneField(settings.AUTH_USER_MODEL, related_name='perfil')
     nombre = models.CharField(max_length=100, unique=True)
 
+    objects = InheritanceManager()
+
     class Meta:
         db_table = 'Perfil'
 
 
-class Estudiante(PerfilSuscriptor, Perfil):
+class Estudiante(PerfilSuscriptor, PerfilDenunciante, Perfil):
     # Información personal
     dni = models.CharField(max_length=9, unique=True)
     fecha_de_nacimiento = models.DateField()
@@ -84,7 +90,7 @@ class EstudianteHablaIdioma(models.Model):
         db_table = 'EstudianteHablaIdioma'
 
 
-class Profesor(Perfil):
+class Profesor(Perfil, PerfilDenunciante):
     url_upc = models.URLField(unique=True)
     foto_de_perfil = models.ImageField(upload_to=get_image_path, blank=True, null=True)
     departamento = models.ForeignKey(Departamento)
@@ -93,7 +99,7 @@ class Profesor(Perfil):
         db_table = 'Profesor'
 
 
-class Empresa(Perfil):
+class Empresa(Perfil, ModeloIncluibleEnLaListaNegra, PerfilDenunciante):
     # Información de la empresa
     cif = models.CharField(max_length=9, unique=True)
     logotipo = models.ImageField(upload_to=get_image_path, blank=True, null=True)
@@ -113,5 +119,11 @@ class Empresa(Perfil):
 
     class Meta:
         db_table = 'Empresa'
+
+    def convertir_en_premium(self):
+        self.es_premium = True
+        self.fecha_de_finalizacion_de_cuenta_premium = datetime.datetime.today() + datetime.timedelta(weeks=52)
+        self.save()
+
 
 
