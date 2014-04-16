@@ -26,4 +26,5 @@ class ElementoDeLaListaNegra(models.Model):
     class Meta:
         # The Generic FK is really a Generic OneToOne relationship
         unique_together = ('content_type', 'object_id')
+        db_table = 'ElementoDeLaListaNegra'
 

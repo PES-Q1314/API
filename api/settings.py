@@ -21,7 +21,7 @@ AUTH_USER_MODEL = 'cuentas.SystemUser'
 SECRET_KEY = '1vt2h1=g+@y=-zy6oiw$3n&dy3ap5m58@s&t5c9q9b*h)eb(rz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'apps.suscripciones',
     'apps.congelaciones',
     'apps.denuncias',
+    'apps.lista_negra',
 
     # Rest API
     'tastypie'
