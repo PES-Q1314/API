@@ -1,16 +1,7 @@
 from apps.usuarios.models import Empresa, Estudiante
+from core.authorization import es_empresa_no_premium, es_estudiante
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
-
-
-def es_empresa_no_premium(bundle):
-        e = Empresa.objects.filter(usuario=bundle.request.user)
-        return e.exists() and not e.first().es_premium
-
-
-def es_estudiante(bundle):
-        e = Estudiante.objects.filter(usuario=bundle.request.user)
-        return e.exists()
 
 
 class OpenProfileAuth(ReadOnlyAuthorization):

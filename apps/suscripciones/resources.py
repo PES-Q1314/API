@@ -27,13 +27,7 @@ class RecursoSuscribible(ActionResourceMixin, ModelResource):
     def suscribirse(self, request):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
-            suscriptor = Perfil.objects.get_subclass(usuario__id=request.user.id)
-            Suscripcion.objects.create(modelo=modelo, suscriptor=suscriptor, motivo='...')
-            return self.create_response(request, {}, HttpOK)
-        # TODO: quitarlo cuando haya autenticación obligatoria
-        except ObjectDoesNotExist:
-            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
-            suscriptor = Perfil.objects.all().select_subclasses().first()
+            suscriptor = Perfil.objects.get_subclass(usuario=request.user)
             Suscripcion.objects.create(modelo=modelo, suscriptor=suscriptor, motivo='...')
             return self.create_response(request, {}, HttpOK)
         except Exception as e:

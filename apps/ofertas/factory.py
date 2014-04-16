@@ -32,7 +32,7 @@ def crear_oferta_de_empresa(i):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Empresa.objects.first() if Empresa.objects.exists() else crear_empresa(),
+        'usuario': Empresa.objects.first() if Empresa.objects.exists() else crear_empresa(),
         'hay_posibilidad_de_tfg': False,
         'salario_mensual': 600,
         'persona_de_contacto': 'Enric Margot',
@@ -71,7 +71,7 @@ def crear_oferta_de_departamento(i):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Profesor.objects.first() if Profesor.objects.exists() else crear_profesor()
+        'usuario': Profesor.objects.first() if Profesor.objects.exists() else crear_profesor()
     }
     of = OfertaDeDepartamento.objects.create(**datos)
 
@@ -98,7 +98,7 @@ def crear_oferta_de_proyecto_emprendedor(i):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Estudiante.objects.first() if Estudiante.objects.exists() else crear_estudiante()
+        'usuario': Estudiante.objects.first() if Estudiante.objects.exists() else crear_estudiante()
     }
     of = OfertaDeProyectoEmprendedor.objects.create(**datos)
     e = Especialidad.objects.first() if Especialidad.objects.exists() else crear_especialidad()

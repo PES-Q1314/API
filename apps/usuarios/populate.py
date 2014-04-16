@@ -19,3 +19,8 @@ for u in grupo[1]:
 # CREAMOS EMPRESAS
 for u in grupo[2]:
     crear_empresa(u)
+
+
+# CREAMOS ADMINISTRADORES
+for u in grupo[3]:
+    crear_administrador(u)

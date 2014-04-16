@@ -13,12 +13,12 @@ class OfertaAuth(ReadOnlyAuthorization):
     def update_list(self, object_list, bundle):
         allowed = []
         for obj in object_list:
-            if obj.autor.usuario == bundle.request.user:
+            if obj.usuario.usuario == bundle.request.user:
                 allowed.append(obj)
         return allowed
 
     def update_detail(self, object_list, bundle):
-        return bundle.obj.autor.usuario == bundle.request.user
+        return bundle.obj.usuario.usuario == bundle.request.user
 
     def delete_list(self, object_list, bundle):
         allowed = []
@@ -28,11 +28,11 @@ class OfertaAuth(ReadOnlyAuthorization):
         return allowed
 
     def delete_detail(self, object_list, bundle):
-        return bundle.obj.autor.usuario == bundle.request.user
+        return bundle.obj.usuario.usuario == bundle.request.user
 
 
 def get_usuario(oferta):
-    return Oferta.objects.get_subclass(id=oferta.id).autor.usuario
+    return Oferta.objects.get_subclass(id=oferta.id).usuario.usuario
 
 class OfertaPlusAuth(ReadOnlyAuthorization):
     def create_list(self, object_list, bundle):

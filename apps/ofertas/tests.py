@@ -35,21 +35,11 @@ class OfertasResourcesTest(ResourceTestCase):
         self.assertHttpOK(resp)
         self.assertEqual(self.deserialize(resp)['meta']['total_count'], OfertaDeProyectoEmprendedor.objects.count())
 
-    def test_post_oferta(self):
-        # Cuando posteas una oferta, esta se asocia a ti, y si intentas postear una oferta de un tipo del que no
-        # puedes ser autor, te devuelve Unauthorized
-        self.login(self.creds[0]) # Estudiante
-        d = DATOS_OBLIGATORIOS_OFERTA
-        self.assertHttpCreated(self.api_client.post('/api/ofertadeproyectoemprendedor/', data=d))
-        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadeempresa/', data=d))
-        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadedepartamento/', data=d))
-
-
     def test_post_requisito_experiencia(self):
         # Queremos añadir a la oferta un requisito de experiencia
         self.login(self.creds[0])
         d = DATOS_OBLIGATORIOS_OFERTA
-        d['autor'] = self.est
+        d['usuario'] = self.est
         of = OfertaDeProyectoEmprendedor.objects.create(**d)
         s = SectorDelMercado.objects.first() if SectorDelMercado.objects.exists() else crear_sector()
         d = {
@@ -65,5 +55,34 @@ class OfertasResourcesTest(ResourceTestCase):
 
 
 
+"""
+class Ofertas2ResourcesTest(ResourceTestCase):
+    def setUp(self):
+        super().setUp()
 
+        self.creds = [{'username': 'test{0}'.format(i), 'password': '1234'} for i in range(3)]
+        self.users = [
+            SystemUser.objects.create_user(c['username'], '{0}@{0}.upc.edu'.format(c['username']), c['password']) for c
+            in self.creds]
+
+        # 0 es un estudiante, 1 es un profesor, 2 es una empresa, y 3 es una empresa premium
+        self.est = crear_estudiante(self.users[0])
+        self.prof = crear_profesor(self.users[1])
+        self.empr = crear_empresa(self.users[2])
+
+    def login(self, credentials=None):
+        if credentials is None:
+            credentials = self.creds[0]
+        self.assertHttpOK(self.api_client.post('/api/systemuser/login/', data=credentials))
+
+    def test_post_oferta(self):
+        # Cuando posteas una oferta, esta se asocia a ti, y si intentas postear una oferta de un tipo del que no
+        # puedes ser usuario, te devuelve Unauthorized
+        self.login(self.creds[0]) # Estudiante
+        d = DATOS_OBLIGATORIOS_OFERTA
+        self.assertHttpCreated(self.api_client.post('/api/ofertadeproyectoemprendedor/', data=d))
+        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadeempresa/', data=d))
+        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadedepartamento/', data=d))
+
+"""
 

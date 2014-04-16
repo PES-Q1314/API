@@ -3,7 +3,7 @@ from apps.base import enums
 from apps.base.factory import crear_especialidad, crear_departamento, crear_sector, crear_conocimiento, crear_idioma
 from apps.base.models import Especialidad, ConocimientoTecnico, Idioma, SectorDelMercado, Departamento
 from apps.usuarios.models import Estudiante, EstudianteTieneConocimientoTecnico, EstudianteHablaIdioma, \
-    EstudianteTieneExperienciaLaboral, Profesor, Empresa
+    EstudianteTieneExperienciaLaboral, Profesor, Empresa, Administrador
 
 
 def crear_estudiante(u):
@@ -66,3 +66,12 @@ def crear_empresa(u, es_premium=False):
     }
     empr = Empresa.objects.create(**datos)
     return empr
+
+
+def crear_administrador(u):
+    datos = {
+        'usuario': u,
+        'nombre': u.username,
+    }
+    admin = Administrador.objects.create(**datos)
+    return admin

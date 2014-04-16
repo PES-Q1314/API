@@ -20,13 +20,13 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
     def dehydrate_modificado_tras_una_congelacion(self, bundle):
         return bundle.obj.ha_sido_modificado_tras_una_congelacion
 
-    @action(allowed=('post',), static=False)
+    @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "Elemento congelado correctamente")
     @response(HttpBadRequest, "No es posible congelar el elemento")
-    def congelar(self, request):
+    def congelar(self, request, motivo):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
-            Congelacion.objects.create(modelo=modelo, motivo='...')
+            Congelacion.objects.create(modelo=modelo, motivo=motivo)
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())

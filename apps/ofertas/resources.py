@@ -41,20 +41,20 @@ class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, 
 
 
 class OfertaDeEmpresaResource(OfertaResource):
-    autor = fields.ForeignKey(EmpresaResource, 'autor')
+    usuario = fields.ForeignKey(EmpresaResource, 'usuario')
     Meta = MetaGenerica(modelo=OfertaDeEmpresa)
     Meta.authorization = OfertaAuth()
 
 
 
 class OfertaDeDepartamentoResource(OfertaResource):
-    autor = fields.ForeignKey(ProfesorResource, 'autor')
+    usuario = fields.ForeignKey(ProfesorResource, 'usuario')
     Meta = MetaGenerica(modelo=OfertaDeDepartamento)
     Meta.authorization = OfertaAuth()
 
 
 class OfertaDeProyectoEmprendedorResource(OfertaResource):
-    autor = fields.ForeignKey(EstudianteResource, 'autor')
+    usuario = fields.ForeignKey(EstudianteResource, 'usuario')
     Meta = MetaGenerica(modelo=OfertaDeProyectoEmprendedor)
     Meta.authorization = OfertaAuth()
 
