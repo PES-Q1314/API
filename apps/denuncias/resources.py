@@ -15,7 +15,7 @@ class DenunciaResource(ModelResource):
 
 
 class RecursoDenunciable(ActionResourceMixin, ModelResource):
-    denuncias = fields.ToManyField(DenunciaResource, 'denuncias', full=True)
+    denuncias = fields.ToManyField(DenunciaResource, 'denuncias', full=True, null=True)
 
     @action(allowed=('post',), static=False)
     @response(HttpOK, "Elemento denunciado correctamente")

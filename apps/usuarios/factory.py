@@ -1,17 +1,12 @@
 from datetime import date
 from apps.base import enums
+from apps.base.factory import crear_especialidad, crear_departamento, crear_sector, crear_conocimiento, crear_idioma
 from apps.base.models import Especialidad, ConocimientoTecnico, Idioma, SectorDelMercado, Departamento
-from apps.cuentas.models import SystemUser
 from apps.usuarios.models import Estudiante, EstudianteTieneConocimientoTecnico, EstudianteHablaIdioma, \
     EstudianteTieneExperienciaLaboral, Profesor, Empresa
 
-# Obtenemos todos los usuarios y los agrupamos de 3 en 3 (para tener tres de cada tipo de perfiles, y el resto administradores)
-usuarios = SystemUser.objects.all()
-chunks = lambda l, n: [l[x: x + n] for x in range(0, len(l), n)]
-grupo = chunks(usuarios, 3)
 
-# CREAMOS ESTUDIANTES
-for u in grupo[0]:
+def crear_estudiante(u):
     datos = {
         'usuario': u,
         'nombre': u.username,
@@ -22,7 +17,7 @@ for u in grupo[0]:
         'direccion': 'Carrer dels Esports, Barcelona, Spain',
         'latitud': 41.4010277,
         'longitud': 2.1119529999999713,
-        'especialidad': Especialidad.objects.first(),
+        'especialidad': Especialidad.objects.first() if Especialidad.objects.exists() else crear_especialidad(),
         'ultimo_curso_academico_superado': enums.CURSO_ACADEMICO[0][0],
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
         'busca_trabajo': True,
@@ -31,39 +26,43 @@ for u in grupo[0]:
     }
     est = Estudiante.objects.create(**datos)
 
-    for ct in ConocimientoTecnico.objects.all()[:5]:
+    cts = ConocimientoTecnico.objects.all()[:5] if ConocimientoTecnico.objects.exists() else [crear_conocimiento()]
+    for ct in cts:
         EstudianteTieneConocimientoTecnico.objects.create(estudiante=est, conocimiento=ct,
                                                           nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
-    for i in Idioma.objects.all()[:3]:
+    ids = Idioma.objects.all()[:3] if Idioma.objects.exists() else [crear_idioma()]
+    for i in ids:
         EstudianteHablaIdioma.objects.create(estudiante=est, idioma=i, nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
-    s = SectorDelMercado.objects.first()
+    s = SectorDelMercado.objects.first() if SectorDelMercado.objects.exists() else crear_sector()
     EstudianteTieneExperienciaLaboral.objects.create(estudiante=est, sector=s, meses=3)
 
-# CREAMOS PROFESORES
-for u in grupo[1]:
+    return est
+
+def crear_profesor(u):
     datos = {
         'usuario': u,
         'nombre': u.username,
-        'departamento': Departamento.objects.first(),
+        'departamento': Departamento.objects.first() if Departamento.objects.exists() else crear_departamento(),
         'url_upc': 'http://directori.upc.edu/directori/dadesPersona.jsp;jsessionid=B88FF6EEE9F066F2A826A87EA9FBF63E?id=100185{0}'.format(u.id%10)
     }
     prof = Profesor.objects.create(**datos)
+    return prof
 
-
-# CREAMOS EMPRESAS
-for u in grupo[2]:
+def crear_empresa(u, es_premium=False):
     datos = {
         'usuario': u,
         'nombre': u.username,
         'cif': str(u.id),
-        'sector': SectorDelMercado.objects.first(),
+        'sector': SectorDelMercado.objects.first() if SectorDelMercado.objects.exists() else crear_sector(),
         'tamanyo': enums.TAMANYO_DE_EMPRESA[0][0],
         'direccion': 'Av Meridiana 234, Barcelona, Spain',
         'longitud': 41.4145023,
         'latitud': 2.1872143000000506,
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
-        'esta_activa': True
+        'esta_activa': True,
+        'es_premium': es_premium
     }
     empr = Empresa.objects.create(**datos)
+    return empr

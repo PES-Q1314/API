@@ -23,7 +23,7 @@ class SuscripcionResource(ModelResource):
 
 
 class RecursoSuscribible(ActionResourceMixin, ModelResource):
-    suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True)
+    suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True, null=True)
 
     @action(allowed=('post',), static=False)
     @response(HttpOK, "Suscrito correctamente al elemento")

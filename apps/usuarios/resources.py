@@ -3,54 +3,43 @@ from apps.base.resources import ConocimientoTecnicoResource, SectorDelMercadoRes
 from apps.congelaciones.resources import RecursoCongelable
 from apps.denuncias.resources import RecursoDenunciable
 from apps.lista_negra.resources import RecursoIncluibleEnLaListaNegra
+from apps.usuarios.authorizations import OpenProfileAuth, ClosedProfileAuth, EstudiantePlusAuth
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
     EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma
 from core.action import action, response, ActionResourceMixin
 from core.http import HttpOK
 from core.resource import MetaGenerica
 from tastypie import fields
+from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
 
 
-class EstudianteTieneConocimientoTecnicoResource(ModelResource):
-    conocimiento = fields.ForeignKey(ConocimientoTecnicoResource, 'conocimiento', full=True)
-    Meta = MetaGenerica(modelo=EstudianteTieneConocimientoTecnico)
-
-
-class EstudianteTieneExperienciaLaboralResource(ModelResource):
-    sector = fields.ForeignKey(SectorDelMercadoResource, 'sector', full=True)
-    Meta = MetaGenerica(modelo=EstudianteTieneExperienciaLaboral)
-
-
-class EstudianteHablaIdiomaResource(ModelResource):
-    idioma = fields.ForeignKey(IdiomaResource, 'idioma', full=True)
-    Meta = MetaGenerica(modelo=EstudianteHablaIdioma)
-
 
 class EstudianteResource(RecursoDenunciable, RecursoCongelable, ModelResource):
-    conocimientos_tecnicos = fields.ToManyField(EstudianteTieneConocimientoTecnicoResource,
-                                                'conocimiento_tecnico_set', full=True)
-    experiencia_laboral = fields.ToManyField(EstudianteTieneExperienciaLaboralResource,
-                                             'experiencia_laboral_set', full=True)
-    idiomas = fields.ToManyField(EstudianteHablaIdiomaResource, 'idioma_set', full=True)
+    conocimientos_tecnicos = fields.ToManyField('apps.usuarios.resources.EstudianteTieneConocimientoTecnicoResource',
+                                                'conocimiento_tecnico_set', full=True, null=True)
+    experiencia_laboral = fields.ToManyField('apps.usuarios.resources.EstudianteTieneExperienciaLaboralResource',
+                                             'experiencia_laboral_set', full=True, null=True)
+    idiomas = fields.ToManyField('apps.usuarios.resources.EstudianteHablaIdiomaResource', 'idioma_set', full=True, null=True)
 
     Meta = MetaGenerica(modelo=Estudiante)
-    Meta.list_allowed_methods = ['get']
-    Meta.detail_allowed_methods = ['get', 'patch']
+    Meta.authorization = ClosedProfileAuth()
 
 
 class ProfesorResource(RecursoDenunciable, RecursoCongelable, ModelResource):
     Meta = MetaGenerica(modelo=Profesor)
-    Meta.list_allowed_methods = ['get']
-    Meta.detail_allowed_methods = ['get', 'patch']
+    Meta.authorization = ClosedProfileAuth()
 
 
 class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnLaListaNegra, ActionResourceMixin,
                       ModelResource):
     Meta = MetaGenerica(modelo=Empresa)
-    Meta.list_allowed_methods = ['get', 'post']
-    Meta.detail_allowed_methods = ['get', 'put', 'patch', 'delete']
+    Meta.authorization = OpenProfileAuth()
+
+    # Asociamos la creación de un perfil al usuario que hace la request
+    def obj_create(self, bundle, **kwargs):
+        return super().obj_create(bundle, usuario=bundle.request.user)
 
     @action(allowed=('post',), static=False)
     @response(HttpOK, "Pago correcto. Conversión a Premium realizada")
@@ -59,3 +48,37 @@ class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnL
         # De ser así, convertimos la empresa en Premium durante un año
         self._meta.object_class.objects.get(pk=request.api['pk']).convertir_en_premium()
         return self.create_response(request, {}, HttpOK)
+
+
+
+
+##################
+# RELACIONES M2M #
+##################
+
+class EstudiantePlusMixin(ModelResource):
+    estudiante = fields.ForeignKey(EstudianteResource, 'estudiante')
+    # Asociamos la creación de una relación al perfil del estudiante que hace la request
+    def obj_create(self, bundle, **kwargs):
+        e = Estudiante.objects.filter(usuario=bundle.request.user)
+        if e.exists():
+            return super().obj_create(bundle, estudiante=e.first())
+        else:
+            raise ImmediateHttpResponse(HttpUnauthorized())
+
+class EstudianteTieneConocimientoTecnicoResource(EstudiantePlusMixin, ModelResource):
+    conocimiento = fields.ForeignKey(ConocimientoTecnicoResource, 'conocimiento', full=True)
+    Meta = MetaGenerica(modelo=EstudianteTieneConocimientoTecnico)
+    Meta.authorization = EstudiantePlusAuth()
+
+
+class EstudianteTieneExperienciaLaboralResource(EstudiantePlusMixin, ModelResource):
+    sector = fields.ForeignKey(SectorDelMercadoResource, 'sector', full=True)
+    Meta = MetaGenerica(modelo=EstudianteTieneExperienciaLaboral)
+    Meta.authorization = EstudiantePlusAuth()
+
+
+class EstudianteHablaIdiomaResource(EstudiantePlusMixin, ModelResource):
+    idioma = fields.ForeignKey(IdiomaResource, 'idioma', full=True)
+    Meta = MetaGenerica(modelo=EstudianteHablaIdioma)
+    Meta.authorization = EstudiantePlusAuth()

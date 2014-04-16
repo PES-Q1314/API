@@ -12,7 +12,6 @@ class ElementoDeLaListaNegraResource(ModelResource):
 
 
 class RecursoIncluibleEnLaListaNegra(ActionResourceMixin, ModelResource):
-    pass
 
     @action(allowed=('post',), static=False)
     @response(HttpOK, "Elemento añadido a la lista negra")
