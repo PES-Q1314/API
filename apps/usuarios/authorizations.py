@@ -36,13 +36,13 @@ class ClosedProfileAuth(ReadOnlyAuthorization):
 
     def read_list(self, object_list, bundle):
         # Todos tienen acceso al perfil menos las empresas sin cuenta premium
-        if es_empresa_no_premium(bundle):
+        if es_empresa_no_premium(bundle.request.user):
             raise Unauthorized()
         else:
             return object_list
 
     def read_detail(self, object_list, bundle):
-        return not es_empresa_no_premium(bundle)
+        return not es_empresa_no_premium(bundle.request.user)
 
     def update_list(self, object_list, bundle):
         allowed = []
@@ -58,13 +58,13 @@ class ClosedProfileAuth(ReadOnlyAuthorization):
 class EstudiantePlusAuth(ClosedProfileAuth):
 
     def create_list(self, object_list, bundle):
-        if es_estudiante(bundle):
+        if es_estudiante(bundle.request.user):
             return object_list
         else:
             raise Unauthorized()
 
     def create_detail(self, object_list, bundle):
-        return es_estudiante(bundle)
+        return es_estudiante(bundle.request.user)
 
     def update_list(self, object_list, bundle):
         raise Unauthorized()
@@ -73,7 +73,7 @@ class EstudiantePlusAuth(ClosedProfileAuth):
         raise Unauthorized()
 
     def delete_list(self, object_list, bundle):
-        if es_estudiante(bundle):
+        if es_estudiante(bundle.request.user):
             allowed = []
             for obj in object_list:
                 if obj.estudiante.usuario == bundle.request.user:
@@ -83,4 +83,4 @@ class EstudiantePlusAuth(ClosedProfileAuth):
             raise Unauthorized()
 
     def delete_detail(self, object_list, bundle):
-        return es_estudiante(bundle) and bundle.obj.estudiante.usuario == bundle.request.user
+        return es_estudiante(bundle.request.user) and bundle.obj.estudiante.usuario == bundle.request.user

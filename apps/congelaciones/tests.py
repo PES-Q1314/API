@@ -31,10 +31,12 @@ class CongelacionesResourcesTest(ResourceTestCase):
 
     def test_congelar(self):
         before = Congelacion.objects.count()
-        self.login(self.creds[0]) # Nos autenticamos como administrador
+        self.login(self.creds[1]) # Nos autenticamos como empresa
         d = {'motivo': '...'}
-        resp = self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d)
-        self.assertHttpOK(resp)
+        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
+
+        self.login(self.creds[0]) # Nos autenticamos como administrador
+        self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
         self.assertGreater(Congelacion.objects.count(), before)
 
     def test_get(self):
@@ -46,4 +48,4 @@ class CongelacionesResourcesTest(ResourceTestCase):
         self.assertHttpOK(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))
 
         self.login(self.creds[2]) # Como otro usuario cualquiera, no
-        self.assertHttpOK(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))
+        self.assertHttpUnauthorized(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))

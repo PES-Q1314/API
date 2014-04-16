@@ -1,5 +1,5 @@
 from apps.cuentas.models import SystemUser
-from apps.usuarios.factory import crear_estudiante, crear_profesor, crear_empresa
+from apps.usuarios.factory import crear_estudiante, crear_profesor, crear_empresa, crear_administrador
 
 # Obtenemos todos los usuarios y los agrupamos de 3 en 3 (para tener tres de cada tipo de perfiles, y el resto administradores)
 usuarios = SystemUser.objects.all()
