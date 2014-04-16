@@ -39,6 +39,13 @@ class CongelacionesResourcesTest(ResourceTestCase):
         self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
         self.assertGreater(Congelacion.objects.count(), before)
 
+    def test_descongelar(self):
+        c = Congelacion.objects.create(modelo=self.of, motivo='...')
+        before = Congelacion.objects.filter(estado='pendiente').count()
+        self.login(self.creds[0]) # Nos autenticamos como administrador
+        self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/descongelar'.format(self.of.pk), data={}))
+        self.assertLess(Congelacion.objects.filter(estado='pendiente').count(), before)
+
     def test_get(self):
         c = Congelacion.objects.create(modelo=self.of, motivo='...')
         self.login(self.creds[0]) # Como admin podemos ver la congelación

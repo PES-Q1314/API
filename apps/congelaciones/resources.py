@@ -3,6 +3,7 @@ from apps.congelaciones.authorizations import CongelacionAuth
 from apps.congelaciones.models import Congelacion
 from apps.usuarios.models import Perfil, Administrador
 from core.action import ActionResourceMixin, action, response
+from core.authorization import es_admin
 from core.http import HttpOK
 from core.resource import MetaGenerica
 from tastypie import fields
@@ -27,11 +28,24 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
     @response(HttpOK, "Elemento congelado correctamente")
     @response(HttpBadRequest, "No es posible congelar el elemento")
     def congelar(self, request, motivo):
-        if not isinstance(Perfil.objects.get_subclass(usuario=request.user), Administrador):
+        if not es_admin(request.user):
             raise ImmediateHttpResponse(HttpUnauthorized())
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             Congelacion.objects.create(modelo=modelo, motivo=motivo)
+            return self.create_response(request, {}, HttpOK)
+        except Exception:
+            raise ImmediateHttpResponse(HttpBadRequest())
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Elemento congelado correctamente")
+    @response(HttpBadRequest, "No es posible congelar el elemento")
+    def descongelar(self, request):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+        try:
+            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            modelo.congelaciones.filter(estado='pendiente').update(estado='resuelta')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
