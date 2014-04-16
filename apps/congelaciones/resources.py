@@ -38,8 +38,8 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
             raise ImmediateHttpResponse(HttpBadRequest())
 
     @action(allowed=('post',), static=False, login_required=True)
-    @response(HttpOK, "Elemento congelado correctamente")
-    @response(HttpBadRequest, "No es posible congelar el elemento")
+    @response(HttpOK, "Elemento descongelado correctamente")
+    @response(HttpBadRequest, "No es posible descongelar el elemento")
     def descongelar(self, request):
         if not es_admin(request.user):
             raise ImmediateHttpResponse(HttpUnauthorized())

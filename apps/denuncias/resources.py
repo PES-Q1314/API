@@ -35,8 +35,8 @@ class RecursoDenunciable(ActionResourceMixin, ModelResource):
             raise ImmediateHttpResponse(HttpBadRequest())
 
     @action(allowed=('post',), static=False, login_required=True)
-    @response(HttpOK, "Elemento denunciado correctamente")
-    @response(HttpBadRequest, "No es posible denunciar el elemento")
+    @response(HttpOK, "Denuncias descartadas")
+    @response(HttpBadRequest, "No es posible descartar las denuncias")
     def descartar_denuncias(self, request):
         if not es_admin(request.user):
             raise ImmediateHttpResponse(HttpUnauthorized())

@@ -28,3 +28,16 @@ class RecursoIncluibleEnLaListaNegra(ActionResourceMixin, ModelResource):
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Elemento quitado de la lista negra")
+    @response(HttpBadRequest, "No es posible quitar el elemento de la lista negra")
+    def quitar_de_la_lista_negra(self, request, motivo):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+        try:
+            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            modelo.entrada_en_la_lista_negra.all().delete()
+            return self.create_response(request, {}, HttpOK)
+        except Exception:
+            raise ImmediateHttpResponse(HttpBadRequest())
