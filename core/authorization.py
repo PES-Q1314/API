@@ -28,5 +28,5 @@ def es_perfil_denunciante(u):
     return issubclass(Perfil.objects.get_subclass(usuario=u).__class__, PerfilDenunciante)
 
 
-def es_perfil_suscritor(u):
+def es_perfil_suscriptor(u):
     return issubclass(Perfil.objects.get_subclass(usuario=u).__class__, PerfilSuscriptor)
