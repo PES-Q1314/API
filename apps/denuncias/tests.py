@@ -41,6 +41,14 @@ class DenunciasResourcesTest(ResourceTestCase):
         self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/denunciar'.format(self.of.pk), data=d))
         self.assertGreater(Denuncia.objects.count(), before)
 
+    def test_descartar_denuncias(self):
+        d = Denuncia.objects.create(modelo=self.of, denunciante=self.est, motivo='...')
+        before = Denuncia.objects.filter(estado='pendiente').count()
+        self.login(self.creds[0])  # Nos autenticamos como administrador
+        self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/descartar_denuncias'.format(self.of.pk), data={}))
+        self.assertLess(Denuncia.objects.filter(estado='pendiente').count(), before)
+        self.assertTrue(Denuncia.objects.filter(estado='desestimada').exists())
+
     def test_get(self):
         d = Denuncia.objects.create(modelo=self.of, denunciante=self.est, motivo='...')
         self.login(self.creds[0])  # Como admin podemos ver la denuncia

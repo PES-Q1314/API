@@ -2,7 +2,7 @@ from apps.denuncias.authorizations import DenunciaAuth
 from apps.denuncias.models import Denuncia, PerfilDenunciante
 from apps.usuarios.models import Perfil
 from core.action import ActionResourceMixin, action, response
-from core.authorization import es_perfil_denunciante
+from core.authorization import es_perfil_denunciante, es_admin
 from core.http import HttpOK
 from core.resource import MetaGenerica
 from django.core.exceptions import ObjectDoesNotExist
@@ -30,6 +30,19 @@ class RecursoDenunciable(ActionResourceMixin, ModelResource):
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             denunciante = Perfil.objects.get_subclass(usuario=request.user)
             Denuncia.objects.create(modelo=modelo, denunciante=denunciante, motivo=motivo)
+            return self.create_response(request, {}, HttpOK)
+        except Exception:
+            raise ImmediateHttpResponse(HttpBadRequest())
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Elemento denunciado correctamente")
+    @response(HttpBadRequest, "No es posible denunciar el elemento")
+    def descartar_denuncias(self, request):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+        try:
+            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            modelo.denuncias.filter(estado='pendiente').update(estado='desestimada')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
