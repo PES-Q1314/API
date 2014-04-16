@@ -5,7 +5,7 @@ from django.contrib import auth
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
-from tastypie.http import HttpUnauthorized, HttpForbidden, HttpCreated
+from tastypie.http import HttpUnauthorized, HttpForbidden, HttpCreated, HttpBadRequest
 from tastypie.resources import ModelResource
 
 
@@ -44,9 +44,11 @@ class SystemUserResource(ActionResourceMixin, ModelResource):
         authentication = SessionAuthentication()
         authorization = SystemUserAuthorization()
 
-        # Only registering features are allowed for lists
-        list_allowed_methods = ['get']
-        detail_allowed_methods = ['get', 'put', 'delete', 'patch']
+    def _serialize_user(self, request, user):
+        bundle = self.build_bundle(obj=user, request=request)
+        bundle = self.full_dehydrate(bundle)
+        bundle = self.alter_detail_data_to_serialize(request, bundle)
+        return bundle
 
     @action(allowed=('post',), static=True)
     @response(HttpOK, "Login successful")
@@ -66,8 +68,11 @@ class SystemUserResource(ActionResourceMixin, ModelResource):
     @action(allowed=('post',), static=True)
     @response(HttpCreated, "Registration successful")
     def register(self, request, username, email, password):
-        user = SystemUser.objects.create_user(username=username, email=email, password=password)
-        return self.create_response(request, self._serialize_user(request, user), response_class=HttpCreated)
+        try:
+            user = SystemUser.objects.create_user(username=username, email=email, password=password)
+            return self.create_response(request, self._serialize_user(request, user), response_class=HttpCreated)
+        except:
+            raise ImmediateHttpResponse(HttpBadRequest())
 
     @action(allowed=('post',), static=True, login_required=True)
     @response(HttpOK, "Logout successful")

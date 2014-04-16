@@ -2,6 +2,7 @@ from inspect import signature, getmembers
 import json
 from functools import wraps
 from django.conf.urls import url
+from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest
 from tastypie.utils import trailing_slash
 
@@ -30,7 +31,12 @@ def action(name=None, url=None, static=False, allowed=None, login_required=False
                 self.throttle_check(request)
                 self.log_throttled_access(request)
 
-            return func(self, request, *args, **kwargs)
+            try:
+                return func(self, request, *args, **kwargs)
+            except ImmediateHttpResponse as e:
+                raise e
+            except:
+                raise ImmediateHttpResponse(HttpBadRequest())
 
         wrapper.is_action = True
         wrapper.action_is_static = static
