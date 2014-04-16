@@ -1,12 +1,24 @@
 from datetime import date
 from apps.base import enums
+from apps.base.factory import crear_idioma, crear_conocimiento, crear_sector, crear_especialidad
 from apps.base.models import ConocimientoTecnico, Idioma, SectorDelMercado, Especialidad
-from apps.ofertas.models import Oferta, RequisitoDeConocimientoTecnico, RequisitoDeIdioma, RequisitoDeExperienciaLaboral, \
-    OfertaDeEmpresa, OfertaDeDepartamento, OfertaDeProyectoEmprendedor
+from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico, RequisitoDeIdioma, \
+    RequisitoDeExperienciaLaboral, OfertaDeDepartamento, OfertaDeProyectoEmprendedor
+from apps.usuarios.factory import crear_empresa, crear_profesor, crear_estudiante
 from apps.usuarios.models import Empresa, Profesor, Estudiante
 
-# CREAMOS OFERTAS DE EMPRESA
-for i in range(50):
+DATOS_OBLIGATORIOS_OFERTA = {
+    'titulo': 'Oferta',
+    'descripcion': 'Lorem Ipsum Dolor Sit Amet',
+    'fecha_de_incorporacion': date.today(),
+    'numero_de_puestos_vacantes': 4,
+    'horario': enums.HORARIO_DE_TRABAJO[0][0],
+    'tipo_de_jornada': enums.JORNADA_LABORAL[1][0],
+    'ultimo_curso_academico_superado': enums.CURSO_ACADEMICO[0][0]
+}
+
+
+def crear_oferta_de_empresa(i):
     datos = {
         'titulo': 'Oferta de Empresa {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
@@ -20,7 +32,7 @@ for i in range(50):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Empresa.objects.first(),
+        'autor': Empresa.objects.first() if Empresa.objects.exists() else crear_empresa(),
         'hay_posibilidad_de_tfg': False,
         'salario_mensual': 600,
         'persona_de_contacto': 'Enric Margot',
@@ -28,22 +40,25 @@ for i in range(50):
     }
     of = OfertaDeEmpresa.objects.create(**datos)
 
-    for ct in ConocimientoTecnico.objects.all()[1:5]:
+    cts = ConocimientoTecnico.objects.all()[:5] if ConocimientoTecnico.objects.exists() else [crear_conocimiento()]
+    for ct in cts:
         RequisitoDeConocimientoTecnico.objects.create(oferta=of, conocimiento=ct,
-                                                          nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
+                                                      nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
-    for i in Idioma.objects.all()[1:4]:
+    ids = Idioma.objects.all()[:3] if Idioma.objects.exists() else [crear_idioma()]
+    for i in ids:
         RequisitoDeIdioma.objects.create(oferta=of, idioma=i, nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
-    s = SectorDelMercado.objects.first()
+    s = SectorDelMercado.objects.first() if SectorDelMercado.objects.exists() else crear_sector()
     RequisitoDeExperienciaLaboral.objects.create(oferta=of, sector=s, meses=12)
 
-    of.especialidades.add(Especialidad.objects.first())
+    e = Especialidad.objects.first() if Especialidad.objects.exists() else crear_especialidad()
+    of.especialidades.add(e)
     of.save()
+    return of
 
 
-# CREAMOS OFERTAS DE DEPARTAMENTO
-for i in range(50):
+def crear_oferta_de_departamento(i):
     datos = {
         'titulo': 'Oferta de Departamento {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
@@ -56,20 +71,22 @@ for i in range(50):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Profesor.objects.first()
+        'autor': Profesor.objects.first() if Profesor.objects.exists() else crear_profesor()
     }
     of = OfertaDeDepartamento.objects.create(**datos)
 
-    for ct in ConocimientoTecnico.objects.all()[1:5]:
+    cts = ConocimientoTecnico.objects.all()[:5] if ConocimientoTecnico.objects.exists() else [crear_conocimiento()]
+    for ct in cts:
         RequisitoDeConocimientoTecnico.objects.create(oferta=of, conocimiento=ct,
-                                                          nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
+                                                      nivel=enums.NIVEL_DE_CONOCIMIENTO[0][0])
 
-    of.especialidades.add(Especialidad.objects.first())
+    e = Especialidad.objects.first() if Especialidad.objects.exists() else crear_especialidad()
+    of.especialidades.add(e)
     of.save()
+    return of
 
 
-# CREAMOS OFERTAS DE PROYECTOS EMPRENDEDORES
-for i in range(50):
+def crear_oferta_de_proyecto_emprendedor(i):
     datos = {
         'titulo': 'Oferta de Proyecto Emprendedor {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
@@ -81,8 +98,10 @@ for i in range(50):
         'direccion': 'Avinguda Diagonal 34, Barcelona, Spain',
         'latitud': 41.4102793,
         'longitud': 2.2131842999999662,
-        'autor': Estudiante.objects.first()
+        'autor': Estudiante.objects.first() if Estudiante.objects.exists() else crear_estudiante()
     }
     of = OfertaDeProyectoEmprendedor.objects.create(**datos)
-    of.especialidades.add(Especialidad.objects.first())
+    e = Especialidad.objects.first() if Especialidad.objects.exists() else crear_especialidad()
+    of.especialidades.add(e)
     of.save()
+    return of

@@ -5,7 +5,7 @@ from apps.denuncias.resources import RecursoDenunciable
 from apps.lista_negra.resources import RecursoIncluibleEnLaListaNegra
 from apps.usuarios.authorizations import OpenProfileAuth, ClosedProfileAuth, EstudiantePlusAuth
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
-    EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma
+    EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma, Perfil
 from core.action import action, response, ActionResourceMixin
 from core.http import HttpOK
 from core.resource import MetaGenerica
@@ -57,12 +57,11 @@ class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnL
 ##################
 
 class EstudiantePlusMixin(ModelResource):
-    estudiante = fields.ForeignKey(EstudianteResource, 'estudiante')
     # Asociamos la creación de una relación al perfil del estudiante que hace la request
     def obj_create(self, bundle, **kwargs):
-        e = Estudiante.objects.filter(usuario=bundle.request.user)
-        if e.exists():
-            return super().obj_create(bundle, estudiante=e.first())
+        p = Perfil.objects.get_subclass(usuario=bundle.request.user)
+        if isinstance(p, Estudiante):
+            return super().obj_create(bundle, estudiante=p)
         else:
             raise ImmediateHttpResponse(HttpUnauthorized())
 

@@ -64,16 +64,7 @@ class ClosedProfileAuth(ReadOnlyAuthorization):
         return bundle.obj.usuario == bundle.request.user
 
 
-class EstudiantePlusAuth(ReadOnlyAuthorization):
-    def read_list(self, object_list, bundle):
-        # Todos tienen acceso al perfil menos las empresas sin cuenta premium
-        if es_empresa_no_premium(bundle):
-            raise Unauthorized()
-        else:
-            return object_list
-
-    def read_detail(self, object_list, bundle):
-        return not es_empresa_no_premium(bundle)
+class EstudiantePlusAuth(ClosedProfileAuth):
 
     def create_list(self, object_list, bundle):
         if es_estudiante(bundle):

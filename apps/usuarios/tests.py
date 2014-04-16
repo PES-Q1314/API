@@ -27,7 +27,7 @@ class UsuariosResourcesTest(ResourceTestCase):
             credentials = self.creds[0]
         self.assertHttpOK(self.api_client.post('/api/systemuser/login/', data=credentials))
 
-    def test_get_colsed_profile(self):
+    def test_get_closed_profile(self):
         # Un estudiante puede consultar cualquier perfil cerrado
         self.login(self.creds[0])
         self.assertHttpOK(self.api_client.get('/api/estudiante/'))
@@ -76,6 +76,12 @@ class UsuariosResourcesTest(ResourceTestCase):
         self.assertFalse(self.est.conocimiento_tecnico_set.all().exists())
         # Borramos nuestros propios conocimientos, pero no los de los demás
         self.assertTrue(EstudianteTieneConocimientoTecnico.objects.exists())
+
+    def test_verificar_premium(self):
+        self.login(self.creds[2])
+        d = {'clave_del_servicio_externo': 13445}
+        self.assertHttpOK(self.api_client.post('/api/empresa/{0}/verificar_premium/'.format(self.empr.pk), data=d))
+
 
 
 
