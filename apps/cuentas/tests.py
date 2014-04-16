@@ -2,7 +2,7 @@ from apps.cuentas.models import SystemUser
 from tastypie.test import ResourceTestCase
 
 
-class BaseResourcesTest(ResourceTestCase):
+class CuentasResourcesTest(ResourceTestCase):
     def setUp(self):
         super().setUp()
 
