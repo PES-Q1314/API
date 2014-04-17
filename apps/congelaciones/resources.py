@@ -36,10 +36,6 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             Congelacion.objects.create(modelo=modelo, motivo=motivo)
-
-            # Notificamos al usuario relacionado con el elemento
-            # usuario = resolver_usuario(modelo)
-            # usuario.email_user(subject='', message='')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
@@ -53,10 +49,6 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             modelo.congelaciones.filter(estado='pendiente').update(estado='resuelta')
-
-            # Notificamos al usuario relacionado con el elemento
-            # usuario = resolver_usuario(modelo)
-            # usuario.email_user(subject='', message='')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
@@ -72,10 +64,7 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
             # Para que los elementos eliminados no interfieran con el sistema, creamos
             # una copia serializada de los mismos y los guardamos en un fichero de eliminaciones
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
-            usuario = resolver_usuario(modelo)
             modelo.delete()
-            # Notificamos al usuario relacionado con el elemento
-            # usuario.email_user(subject='', message='')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())

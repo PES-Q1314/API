@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'apps.congelaciones',
     'apps.denuncias',
     'apps.lista_negra',
+    'apps.soporte',
 
     # Rest API
     'tastypie'
