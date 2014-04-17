@@ -1,6 +1,7 @@
 # coding=utf-8
 from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento, Especialidad
 from core.resource import MetaGenerica
+from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 
 
@@ -13,12 +14,14 @@ class ConocimientoTecnicoResource(ModelResource):
     Meta = MetaGenerica(modelo=ConocimientoTecnico)
     Meta.list_allowed_methods = ['get', 'post']
     Meta.detail_allowed_methods = ['get']
+    Meta.authorization = Authorization()
 
 
 class SectorDelMercadoResource(ModelResource):
     Meta = MetaGenerica(modelo=SectorDelMercado)
     Meta.list_allowed_methods = ['get', 'post']
     Meta.detail_allowed_methods = ['get']
+    Meta.authorization = Authorization()
 
 
 class DepartamentoResource(ModelResource):

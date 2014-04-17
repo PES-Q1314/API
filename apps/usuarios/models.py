@@ -126,4 +126,12 @@ class Empresa(Perfil, ModeloIncluibleEnLaListaNegra, PerfilDenunciante):
         self.save()
 
 
+class Administrador(Perfil):
+    class Meta:
+        db_table = 'Administrador'
+
+
+class Directivo(Perfil):
+    class Meta:
+        db_table = 'Directivo'
 

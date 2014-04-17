@@ -21,7 +21,7 @@ AUTH_USER_MODEL = 'cuentas.SystemUser'
 SECRET_KEY = '1vt2h1=g+@y=-zy6oiw$3n&dy3ap5m58@s&t5c9q9b*h)eb(rz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 TEMPLATE_DEBUG = True
 
@@ -46,6 +46,8 @@ INSTALLED_APPS = (
     'apps.congelaciones',
     'apps.denuncias',
     'apps.lista_negra',
+    'apps.soporte',
+    'apps.analitica',
 
     # Rest API
     'tastypie'
@@ -58,6 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.cors.CORSMiddleware',
 )
 
 ROOT_URLCONF = 'api.urls'

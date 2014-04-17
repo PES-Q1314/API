@@ -6,6 +6,7 @@ from apps.denuncias.models import ModeloDenunciable
 from apps.suscripciones.models import ModeloSuscribible
 from apps.usuarios.models import Empresa, Profesor, Estudiante, Perfil
 from django.db import models
+from model_utils.managers import InheritanceManager
 
 
 class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Model):
@@ -34,6 +35,7 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
     # Metadatos de la oferta
     fecha_de_creacion = models.DateTimeField(auto_now_add=True)
 
+    objects = InheritanceManager()
 
     class Meta:
         db_table = 'Oferta'
@@ -68,8 +70,8 @@ class RequisitoDeIdioma(models.Model):
 
 
 class OfertaDeEmpresa(Oferta):
-    autor = models.ForeignKey(Empresa)
-    hay_posibilidad_de_tfg = models.BooleanField()
+    usuario = models.ForeignKey(Empresa)
+    hay_posibilidad_de_tfg = models.BooleanField(default=False)
     salario_mensual = models.IntegerField(blank=True, null=True)
     persona_de_contacto = models.CharField(max_length=100, blank=True, null=True)
     email_de_contacto = models.EmailField(blank=True, null=True)
@@ -79,14 +81,14 @@ class OfertaDeEmpresa(Oferta):
 
 
 class OfertaDeDepartamento(Oferta):
-    autor = models.ForeignKey(Profesor)
+    usuario = models.ForeignKey(Profesor)
 
     class Meta:
         db_table = 'OfertaDeDepartamento'
 
 
 class OfertaDeProyectoEmprendedor(Oferta):
-    autor = models.ForeignKey(Estudiante)
+    usuario = models.ForeignKey(Estudiante)
 
     class Meta:
         db_table = 'OfertaDeProyectoEmprendedor'
