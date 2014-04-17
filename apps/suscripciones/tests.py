@@ -51,3 +51,15 @@ class SuscripcionesResourcesTest(ResourceTestCase):
 
         self.login(self.creds[2])  # Como empresa que crea la oferta también
         self.assertHttpOK(self.api_client.get('/api/suscripcion/{0}'.format(d.pk)))
+
+    def test_delete(self):
+        d = Suscripcion.objects.create(modelo=self.of, suscriptor=self.est, estado='aceptada')
+        self.login(self.creds[0])  # Como admin no podemos borrarla
+        self.assertHttpUnauthorized(self.api_client.delete('/api/suscripcion/{0}'.format(d.pk)))
+
+        self.login(self.creds[1])  # Como estudiante suscriptor sí, pero si su estado no es 'pendiente', no
+        self.assertHttpBadRequest(self.api_client.delete('/api/suscripcion/{0}'.format(d.pk)))
+
+        d.estado = 'pendiente'
+        d.save()
+        self.assertHttpAccepted(self.api_client.delete('/api/suscripcion/{0}'.format(d.pk)))

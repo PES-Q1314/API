@@ -41,5 +41,14 @@ class Suscripcion(models.Model):
     class Meta:
         db_table = 'Suscripcion'
 
+    class YaValorada(Exception):
+        pass
+
+    def delete(self, using=None):
+        if self.estado != 'pendiente':
+            raise Suscripcion.YaValorada()
+        else:
+            super().delete()
+
 
 

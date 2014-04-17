@@ -20,6 +20,12 @@ class SuscripcionResource(ModelResource):
     def obj_create(self, bundle, **kwargs):
         return super(SuscripcionResource, self).obj_create(bundle, autor=bundle.request.user.perfil)
 
+    def delete_detail(self, request, **kwargs):
+        try:
+            super().delete_detail(request, **kwargs)
+        except Suscripcion.YaValorada:
+            raise ImmediateHttpResponse(HttpBadRequest())
+
 
 class RecursoSuscribible(ActionResourceMixin, ModelResource):
     suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True, null=True)
