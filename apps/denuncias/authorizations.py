@@ -1,4 +1,5 @@
 from core.authorization import es_admin, es_perfil_denunciante
+from core.modelo import resolver_usuario
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
@@ -12,7 +13,7 @@ class DenunciaAuth(ReadOnlyAuthorization):
             return object_list.filter(denunciante__usuario=bundle.request.user)
 
     def read_detail(self, object_list, bundle):
-        return es_admin(bundle.request.user) or bundle.obj.denunciante.usuario == bundle.request.user
+        return es_admin(bundle.request.user) or resolver_usuario(bundle.obj.denunciante) == bundle.request.user
 
     def create_list(self, object_list, bundle):
         # Solo los perfiles denunciantes pueden crear denuncias

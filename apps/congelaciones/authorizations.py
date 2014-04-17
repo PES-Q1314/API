@@ -1,4 +1,5 @@
 from core.authorization import es_admin
+from core.modelo import resolver_usuario
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
@@ -16,13 +17,7 @@ class CongelacionAuth(ReadOnlyAuthorization):
                 return object_list.filter(modelo__usuario=bundle.request.user)
 
     def read_detail(self, object_list, bundle):
-        es_duenyo = False
-        try:
-            es_duenyo = (bundle.obj.modelo.usuario.usuario == bundle.request.user)
-        except:
-            es_duenyo = (bundle.obj.modelo.usuario == bundle.request.user)
-        finally:
-            return es_admin(bundle.request.user) or es_duenyo
+        return es_admin(bundle.request.user) or (resolver_usuario(bundle.obj.modelo) == bundle.request.user)
 
 
     def create_list(self, object_list, bundle):

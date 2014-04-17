@@ -5,11 +5,14 @@ from apps.usuarios.models import Perfil, Administrador
 from core.action import ActionResourceMixin, action, response
 from core.authorization import es_admin
 from core.http import HttpOK
+from core.modelo import resolver_usuario
 from core.resource import MetaGenerica
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
 from tastypie.resources import ModelResource
+
+
 
 
 class CongelacionResource(ModelResource):
@@ -33,6 +36,10 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             Congelacion.objects.create(modelo=modelo, motivo=motivo)
+
+            # Notificamos al usuario relacionado con el elemento
+            # usuario = resolver_usuario(modelo)
+            # usuario.email_user(subject='', message='')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
@@ -46,6 +53,32 @@ class RecursoCongelable(ActionResourceMixin, ModelResource):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             modelo.congelaciones.filter(estado='pendiente').update(estado='resuelta')
+
+            # Notificamos al usuario relacionado con el elemento
+            # usuario = resolver_usuario(modelo)
+            # usuario.email_user(subject='', message='')
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
+
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Elemento eliminado correctamente")
+    @response(HttpBadRequest, "No es posible eliminar el elemento")
+    def eliminar(self, request, motivo):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+        try:
+            # Para que los elementos eliminados no interfieran con el sistema, creamos
+            # una copia serializada de los mismos y los guardamos en un fichero de eliminaciones
+            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            usuario = resolver_usuario(modelo)
+            modelo.delete()
+            # Notificamos al usuario relacionado con el elemento
+            # usuario.email_user(subject='', message='')
+            return self.create_response(request, {}, HttpOK)
+        except Exception:
+            raise ImmediateHttpResponse(HttpBadRequest())
+
+
+

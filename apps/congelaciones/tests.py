@@ -4,11 +4,11 @@ from apps.cuentas.models import SystemUser
 from apps.ofertas.factory import DATOS_OBLIGATORIOS_OFERTA
 from apps.ofertas.models import OfertaDeEmpresa
 from apps.usuarios.factory import crear_administrador, crear_empresa
+from core.modelo import resolver_usuario
 from tastypie.test import ResourceTestCase
 
 
 class CongelacionesResourcesTest(ResourceTestCase):
-
     def setUp(self):
         super().setUp()
 
@@ -29,30 +29,46 @@ class CongelacionesResourcesTest(ResourceTestCase):
             credentials = self.creds[0]
         self.assertHttpOK(self.api_client.post('/api/systemuser/login/', data=credentials))
 
+    def test_resolver_usuario(self):
+        # Creamos una congelación de una oferta y otra de un perfil, para comprobar que
+        # el usuario se resuelve bien a partir del modelo
+        self.assertTrue(
+            isinstance(resolver_usuario(Congelacion.objects.create(modelo=self.of, motivo='.').modelo), SystemUser))
+        self.assertTrue(
+            isinstance(resolver_usuario(Congelacion.objects.create(modelo=self.empr, motivo='.').modelo), SystemUser))
+
     def test_congelar(self):
         before = Congelacion.objects.count()
-        self.login(self.creds[1]) # Nos autenticamos como empresa
+        self.login(self.creds[1])  # Nos autenticamos como empresa
         d = {'motivo': '...'}
-        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
+        self.assertHttpUnauthorized(
+            self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
 
-        self.login(self.creds[0]) # Nos autenticamos como administrador
+        self.login(self.creds[0])  # Nos autenticamos como administrador
         self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/congelar'.format(self.of.pk), data=d))
         self.assertGreater(Congelacion.objects.count(), before)
 
     def test_descongelar(self):
         c = Congelacion.objects.create(modelo=self.of, motivo='...')
         before = Congelacion.objects.filter(estado='pendiente').count()
-        self.login(self.creds[0]) # Nos autenticamos como administrador
+        self.login(self.creds[0])  # Nos autenticamos como administrador
         self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/descongelar'.format(self.of.pk), data={}))
         self.assertLess(Congelacion.objects.filter(estado='pendiente').count(), before)
 
+    def test_eliminar(self):
+        c = Congelacion.objects.create(modelo=self.of, motivo='...')
+        d = {'motivo': '...'}
+        self.login(self.creds[0])  # Nos autenticamos como administrador
+        self.assertHttpOK(self.api_client.post('/api/ofertadeempresa/{0}/eliminar'.format(self.of.pk), data=d))
+        self.assertFalse(OfertaDeEmpresa.objects.filter(pk=self.of.pk).exists())
+
     def test_get(self):
         c = Congelacion.objects.create(modelo=self.of, motivo='...')
-        self.login(self.creds[0]) # Como admin podemos ver la congelación
+        self.login(self.creds[0])  # Como admin podemos ver la congelación
         self.assertHttpOK(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))
 
-        self.login(self.creds[1]) # Como empresa también
+        self.login(self.creds[1])  # Como empresa también
         self.assertHttpOK(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))
 
-        self.login(self.creds[2]) # Como otro usuario cualquiera, no
+        self.login(self.creds[2])  # Como otro usuario cualquiera, no
         self.assertHttpUnauthorized(self.api_client.get('/api/congelacion/{0}'.format(c.pk)))
