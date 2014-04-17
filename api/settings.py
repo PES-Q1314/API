@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'apps.denuncias',
     'apps.lista_negra',
     'apps.soporte',
+    'apps.analitica',
 
     # Rest API
     'tastypie'
@@ -59,6 +60,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.cors.CORSMiddleware',
 )
 
 ROOT_URLCONF = 'api.urls'
