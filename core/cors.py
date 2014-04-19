@@ -2,9 +2,9 @@ from urllib.parse import urlparse
 from api import settings
 from django import http
 
-XS_SHARING_ALLOWED_ORIGINS = ['*']
+XS_SHARING_ALLOWED_ORIGINS = ['http://localhost:8000', 'http://ks3370775.kimsufi.com']
 XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
-XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept', 'X-CSRFToken', 'Authorization']
+XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept', 'X-CSRFToken', 'withCredentials']
 XS_SHARING_ALLOW_CREDENTIALS = 'true'
 
 
