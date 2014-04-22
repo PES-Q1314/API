@@ -41,8 +41,9 @@ class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, 
     def obj_create(self, bundle, **kwargs):
         try:
             p = Perfil.objects.get_subclass(usuario=bundle.request.user)
-            return super().obj_create(bundle, autor=p)
+            return super().obj_create(bundle, usuario=p)
         except Exception as e:
+            print(e)
             raise ImmediateHttpResponse(HttpUnauthorized())
 
 
