@@ -1,16 +1,11 @@
 from urllib.parse import urlparse
 from api import settings
 from django import http
-try:
-    XS_SHARING_ALLOWED_ORIGINS = settings.XS_SHARING_ALLOWED_ORIGINS
-    XS_SHARING_ALLOWED_METHODS = settings.XS_SHARING_ALLOWED_METHODS
-    XS_SHARING_ALLOWED_HEADERS = settings.XS_SHARING_ALLOWED_HEADERS
-    XS_SHARING_ALLOW_CREDENTIALS = settings.XS_SHARING_ALLOW_CREDENTIALS
-except:
-    XS_SHARING_ALLOWED_ORIGINS = ['*']
-    XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
-    XS_SHARING_ALLOWED_HEADERS = ['X-CSRFToken']
-    XS_SHARING_ALLOW_CREDENTIALS = 'true'
+
+XS_SHARING_ALLOWED_ORIGINS = ['http://localhost:8000', 'http://ks3370775.kimsufi.com']
+XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'PATCH', 'DELETE']
+XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept', 'X-CSRFToken', 'withCredentials']
+XS_SHARING_ALLOW_CREDENTIALS = 'true'
 
 
 class CORSMiddleware(object):
