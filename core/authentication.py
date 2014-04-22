@@ -6,6 +6,11 @@ from tastypie.authentication import SessionAuthentication
 
 class SystemAuthentication(SessionAuthentication):
     def is_authenticated(self, request, check_csrf=True, **kwargs):
+        return request.user.is_authenticated()
+
+"""
+class SystemAuthentication(SessionAuthentication):
+    def is_authenticated(self, request, check_csrf=True, **kwargs):
         if request.method in ('GET', 'HEAD', 'OPTIONS', 'TRACE'):
             return request.user.is_authenticated()
 
@@ -18,4 +23,4 @@ class SystemAuthentication(SessionAuthentication):
         if not constant_time_compare(request_csrf_token, csrf_token):
             return False
 
-        return request.user.is_authenticated()
+        return request.user.is_authenticated()"""

@@ -15,7 +15,6 @@ def get_complete_ordering(model):
     return [f.name for f in get_model_fields(model)]
 
 
-
 class MetaGenerica:
     def __init__(self, modelo):
         self.modelo = modelo
