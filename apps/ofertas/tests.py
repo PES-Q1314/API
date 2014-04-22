@@ -1,8 +1,9 @@
 from apps.base.factory import crear_sector
 from apps.base.models import SectorDelMercado
 from apps.cuentas.models import SystemUser
-from apps.ofertas.factory import DATOS_OBLIGATORIOS_OFERTA
-from apps.ofertas.models import OfertaDeProyectoEmprendedor
+from apps.ofertas.factory import DATOS_OBLIGATORIOS_OFERTA, crear_oferta_de_departamento, crear_oferta_de_empresa, \
+    crear_oferta_de_proyecto_emprendedor
+from apps.ofertas.models import OfertaDeProyectoEmprendedor, Oferta
 from apps.usuarios.factory import crear_estudiante, crear_profesor, crear_empresa
 from tastypie.test import ResourceTestCase
 
@@ -52,6 +53,18 @@ class OfertasResourcesTest(ResourceTestCase):
         # Si lo intenta hacer un profesor, no le estará permitido
         self.login(self.creds[1])
         self.assertHttpUnauthorized(self.api_client.post('/api/requisitodeexperiencialaboral/', data=d))
+
+    """
+    def test_tipo(self):
+        crear_oferta_de_empresa()
+        crear_oferta_de_departamento()
+        crear_oferta_de_proyecto_emprendedor()
+        self.login(self.creds[0])
+        resp = self.api_client.get('/api/oferta/')
+        objects = self.deserialize(resp)['objects']
+        for o in objects:
+            print(o['tipo'])
+    """
 
 
 

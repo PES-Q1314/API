@@ -7,7 +7,7 @@ SEXO = GENERO = (
 )
 
 DISPONIBILIDAD = HORARIO_DE_TRABAJO = (
-    ('mañana', 'Mañana'),
+    ('manyana', 'Mañana'),
     ('tarde', 'Tarde'),
     ('total', 'total')
 )
@@ -47,7 +47,7 @@ NIVEL_DE_PRIVACIDAD = (
 )
 
 TAMANYO_DE_EMPRESA = (
-    ('pequeña', 'Pequeña'),
+    ('pequenya', 'Pequeña'),
     ('mediana', 'Mediana'),
     ('grande', 'Grande')
 )
