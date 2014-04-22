@@ -1,4 +1,4 @@
-from tastypie.authentication import SessionAuthentication
+from core.authentication import SystemAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.constants import ALL_WITH_RELATIONS
 
@@ -21,6 +21,6 @@ class MetaGenerica:
         self.modelo = modelo
         self.queryset = modelo.objects.all()
         self.authorization = ReadOnlyAuthorization()
-        self.authentication = SessionAuthentication()
+        self.authentication = SystemAuthentication()
         self.filtering = get_complete_filtering(modelo)
         self.ordering = get_complete_ordering(modelo)
