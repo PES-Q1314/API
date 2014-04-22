@@ -1,4 +1,5 @@
 from apps.cuentas.models import SystemUser
+from apps.usuarios.factory import crear_empresa
 from tastypie.test import ResourceTestCase
 
 
@@ -33,4 +34,9 @@ class CuentasResourcesTest(ResourceTestCase):
         # Tratamos de registrar un usuario con datos incompletos
         bad_user = {'username': 'example.test'}
         self.assertHttpBadRequest(self.api_client.post('/api/systemuser/register', data=bad_user))
+
+    def test_login_return(self):
+        e = crear_empresa(self.users[0])  # El usuario 0 es una empresa
+        resp = self.api_client.post('/api/systemuser/login/', data=self.creds[0])
+        self.assertEqual(self.deserialize(resp)['tipo'], 'Empresa')
 

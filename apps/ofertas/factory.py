@@ -18,7 +18,7 @@ DATOS_OBLIGATORIOS_OFERTA = {
 }
 
 
-def crear_oferta_de_empresa(i):
+def crear_oferta_de_empresa(i=1):
     datos = {
         'titulo': 'Oferta de Empresa {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
@@ -58,7 +58,7 @@ def crear_oferta_de_empresa(i):
     return of
 
 
-def crear_oferta_de_departamento(i):
+def crear_oferta_de_departamento(i=1):
     datos = {
         'titulo': 'Oferta de Departamento {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',
@@ -86,7 +86,7 @@ def crear_oferta_de_departamento(i):
     return of
 
 
-def crear_oferta_de_proyecto_emprendedor(i):
+def crear_oferta_de_proyecto_emprendedor(i=1):
     datos = {
         'titulo': 'Oferta de Proyecto Emprendedor {0}'.format(i),
         'descripcion': 'Lorem Ipsum Dolor Sit Amet',

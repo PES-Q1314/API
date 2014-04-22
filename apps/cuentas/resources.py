@@ -1,7 +1,9 @@
 from apps.cuentas.models import SystemUser
+from apps.usuarios.models import Perfil
 from core.action import ActionResourceMixin, action, response
 from core.http import HttpOK
 from django.contrib import auth
+from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
@@ -37,6 +39,7 @@ class SystemUserAuthorization(Authorization):
 
 
 class SystemUserResource(ActionResourceMixin, ModelResource):
+    tipo = fields.CharField(null=True, blank=True, readonly=True)
 
     class Meta:
         queryset = SystemUser.objects.all()
@@ -44,10 +47,17 @@ class SystemUserResource(ActionResourceMixin, ModelResource):
         authentication = SessionAuthentication()
         authorization = SystemUserAuthorization()
 
+    def dehydrate_tipo(self, bundle):
+        try:
+            return Perfil.objects.get_subclass(pk=bundle.obj.pk).__class__.__name__
+        except:
+            return 'Ninguno'
+
     def _serialize_user(self, request, user):
         bundle = self.build_bundle(obj=user, request=request)
         bundle = self.full_dehydrate(bundle)
         bundle = self.alter_detail_data_to_serialize(request, bundle)
+        #bundle.data['tipo_de_usuario']
         return bundle
 
     @action(allowed=('post',), static=True)
