@@ -1,6 +1,6 @@
 # coding=utf-8
 from apps.base.models import Idioma, ConocimientoTecnico, SectorDelMercado, Departamento, Especialidad
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie.authorization import Authorization
 from tastypie.resources import ModelResource
 

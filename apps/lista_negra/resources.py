@@ -1,9 +1,9 @@
 from apps.lista_negra.authorizations import ListaNegraAuth
 from apps.lista_negra.models import ElementoDeLaListaNegra
-from core.action import ActionResourceMixin, action, response
-from core.authorization import es_admin
+from core.accion import ActionResourceMixin, action, response
+from core.autorizacion import es_admin
 from core.http import HttpOK
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
 from tastypie.resources import ModelResource

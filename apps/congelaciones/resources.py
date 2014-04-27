@@ -2,11 +2,11 @@
 from apps.congelaciones.authorizations import CongelacionAuth
 from apps.congelaciones.models import Congelacion
 from apps.usuarios.models import Perfil, Administrador
-from core.action import ActionResourceMixin, action, response
-from core.authorization import es_admin
+from core.accion import ActionResourceMixin, action, response
+from core.autorizacion import es_admin
 from core.http import HttpOK
 from core.modelo import resolver_usuario
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized

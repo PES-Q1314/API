@@ -2,10 +2,10 @@
 from apps.suscripciones.authorizations import SuscripcionAuth
 from apps.suscripciones.models import Suscripcion
 from apps.usuarios.models import Perfil
-from core.action import action, response, ActionResourceMixin
-from core.authorization import es_perfil_suscriptor
+from core.accion import action, response, ActionResourceMixin
+from core.autorizacion import es_perfil_suscriptor
 from core.http import HttpOK
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from django.core.exceptions import ObjectDoesNotExist
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
@@ -28,7 +28,12 @@ class SuscripcionResource(ModelResource):
 
 
 class RecursoSuscribible(ActionResourceMixin, ModelResource):
+    estado_de_la_suscripcion = fields.CharField(readonly=True, use_in='detail')
     suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True, null=True)
+
+    # TODO: Devolver el estado de la suscripcion o 'no suscrito'.
+    def dehydrate_estado_de_la_suscripcion(self, bundle):
+        return 'aa'
 
     @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "Suscrito correctamente al elemento")

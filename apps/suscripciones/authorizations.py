@@ -1,4 +1,4 @@
-from core.authorization import es_admin, es_perfil_denunciante, es_perfil_suscriptor
+from core.autorizacion import es_admin, es_perfil_denunciante, es_perfil_suscriptor
 from core.modelo import resolver_usuario
 from django.db.models import Q
 from tastypie.authorization import ReadOnlyAuthorization

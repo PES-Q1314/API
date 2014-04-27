@@ -1,6 +1,6 @@
 from apps.soporte.authorizations import SoporteAuth
 from apps.soporte.models import EntradaFAQ, DocumentoDeSoporte
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie.resources import ModelResource
 
 

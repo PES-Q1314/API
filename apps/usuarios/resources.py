@@ -6,9 +6,9 @@ from apps.lista_negra.resources import RecursoIncluibleEnLaListaNegra
 from apps.usuarios.authorizations import OpenProfileAuth, ClosedProfileAuth, EstudiantePlusAuth
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
     EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma, Perfil
-from core.action import action, response, ActionResourceMixin
+from core.accion import action, response, ActionResourceMixin
 from core.http import HttpOK
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie import fields
 from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized

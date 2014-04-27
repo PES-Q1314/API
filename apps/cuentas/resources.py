@@ -1,6 +1,6 @@
 from apps.cuentas.models import SystemUser
 from apps.usuarios.models import Perfil
-from core.action import ActionResourceMixin, action, response
+from core.accion import ActionResourceMixin, action, response
 from core.http import HttpOK
 from django.contrib import auth
 from tastypie import fields

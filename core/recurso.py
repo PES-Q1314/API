@@ -1,4 +1,4 @@
-from core.authentication import SystemAuthentication
+from core.autenticacion import SystemAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.constants import ALL_WITH_RELATIONS
 

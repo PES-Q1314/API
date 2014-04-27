@@ -8,7 +8,7 @@ from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico,
 from apps.suscripciones.resources import RecursoSuscribible
 from apps.usuarios.models import Perfil
 from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized

@@ -1,10 +1,10 @@
 from apps.denuncias.authorizations import DenunciaAuth
 from apps.denuncias.models import Denuncia, PerfilDenunciante
 from apps.usuarios.models import Perfil
-from core.action import ActionResourceMixin, action, response
-from core.authorization import es_perfil_denunciante, es_admin
+from core.accion import ActionResourceMixin, action, response
+from core.autorizacion import es_perfil_denunciante, es_admin
 from core.http import HttpOK
-from core.resource import MetaGenerica
+from core.recurso import MetaGenerica
 from django.core.exceptions import ObjectDoesNotExist
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
