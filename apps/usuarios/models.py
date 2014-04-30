@@ -125,6 +125,13 @@ class Empresa(Perfil, ModeloIncluibleEnLaListaNegra, PerfilDenunciante):
         self.fecha_de_finalizacion_de_cuenta_premium = datetime.datetime.today() + datetime.timedelta(weeks=52)
         self.save()
 
+    def aceptar(self):
+        self.esta_activa = True
+        self.save()
+
+    def rechazar(self):
+        self.delete()
+
 
 class Administrador(Perfil):
     class Meta:

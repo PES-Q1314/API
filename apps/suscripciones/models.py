@@ -11,6 +11,11 @@ class ModeloSuscribible(models.Model):
     class Meta:
         abstract = True
 
+    def suscripcion_del_usuario(self, usuario):
+        u_ct = ContentType.objects.get_for_model(usuario)
+        s = self.suscripciones.filter(suscriptor_ct__pk=u_ct.pk, suscriptor_oid=usuario.id)
+        return s.first() if s.exists() else None
+
 
 class PerfilSuscriptor(models.Model):
     suscripciones = GenericRelation('Suscripcion', content_type_field='suscriptor_ct', object_id_field='suscriptor_oid')
@@ -49,6 +54,8 @@ class Suscripcion(models.Model):
             raise Suscripcion.YaValorada()
         else:
             super().delete()
+
+
 
 
 

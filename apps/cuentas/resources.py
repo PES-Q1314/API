@@ -57,7 +57,6 @@ class SystemUserResource(ActionResourceMixin, ModelResource):
         bundle = self.build_bundle(obj=user, request=request)
         bundle = self.full_dehydrate(bundle)
         bundle = self.alter_detail_data_to_serialize(request, bundle)
-        #bundle.data['tipo_de_usuario']
         return bundle
 
     @action(allowed=('post',), static=True)
