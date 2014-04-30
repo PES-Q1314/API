@@ -1,6 +1,6 @@
 # coding=utf-8
 from apps.suscripciones.authorizations import SuscripcionAuth
-from apps.suscripciones.models import Suscripcion
+from apps.suscripciones.models import Suscripcion, PerfilSuscriptor
 from apps.usuarios.models import Perfil
 from core.accion import action, response, ActionResourceMixin
 from core.autorizacion import es_perfil_suscriptor
@@ -31,12 +31,14 @@ class RecursoSuscribible(ActionResourceMixin, ModelResource):
     estado_de_la_suscripcion = fields.CharField(readonly=True, use_in='detail')
     suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True, null=True)
 
-    # TODO: Devolver el estado de la suscripcion o 'no suscrito'.
     def dehydrate_estado_de_la_suscripcion(self, bundle):
-        return 'aa'
+        s = bundle.obj.suscripcion_del_usuario(Perfil.objects.get_subclass(usuario=bundle.request.user))
+        return s.estado if s is not None else 'no suscrito'
+
 
     @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "Suscrito correctamente al elemento")
+    @response(HttpUnauthorized, "No está autorizado para realizar esta acción")
     @response(HttpBadRequest, "No es posible suscribirse al elemento")
     def suscribirse(self, request):
         if not es_perfil_suscriptor(request.user):
@@ -47,5 +49,17 @@ class RecursoSuscribible(ActionResourceMixin, ModelResource):
             Suscripcion.objects.create(modelo=modelo, suscriptor=suscriptor)
             return self.create_response(request, {}, HttpOK)
         except Exception as e:
+            raise ImmediateHttpResponse(HttpBadRequest())
+
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "La suscripcion al elemento ha sido eliminada correctamente")
+    @response(HttpBadRequest, "No es posible eliminar esta suscripcion")
+    def dessuscribirse(self, request):
+        try:
+            modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            modelo.suscripcion_del_usuario(Perfil.objects.get_subclass(usuario=request.user)).delete()
+            return self.create_response(request, {}, HttpOK)
+        except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
 
