@@ -7,6 +7,7 @@ from apps.usuarios.authorizations import OpenProfileAuth, ClosedProfileAuth, Est
 from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneConocimientoTecnico, \
     EstudianteTieneExperienciaLaboral, EstudianteHablaIdioma, Perfil
 from core.accion import action, response, ActionResourceMixin
+from core.autorizacion import es_admin
 from core.http import HttpOK
 from core.recurso import MetaGenerica
 from tastypie import fields
@@ -41,12 +42,37 @@ class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnL
     def obj_create(self, bundle, **kwargs):
         return super().obj_create(bundle, usuario=bundle.request.user)
 
-    @action(allowed=('post',), static=False)
+    @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "Pago correcto. Conversión a Premium realizada")
+    @response(HttpUnauthorized, "No está autorizado para realizar modificaciones sobre este elemento")
     def verificar_premium(self, request, clave_del_servicio_externo):
+        empresa = self._meta.object_class.objects.get(pk=request.api['pk'])
+        if empresa.usuario != request.user:
+            raise ImmediateHttpResponse(HttpUnauthorized())
+
         # Nos conectamos al servicio premium y comprobamos que la clave_del_servicio_externo es correcta
         # De ser así, convertimos la empresa en Premium durante un año
-        self._meta.object_class.objects.get(pk=request.api['pk']).convertir_en_premium()
+        empresa.convertir_en_premium()
+        return self.create_response(request, {}, HttpOK)
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Empresa aceptada")
+    @response(HttpUnauthorized, "No está autorizado para realizar esta acción")
+    def aceptar(self, request):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+
+        self._meta.object_class.objects.get(pk=request.api['pk']).aceptar()
+        return self.create_response(request, {}, HttpOK)
+
+    @action(allowed=('post',), static=False, login_required=True)
+    @response(HttpOK, "Empresa rechazada y eliminada")
+    @response(HttpUnauthorized, "No está autorizado para realizar esta acción")
+    def rechazar(self, request):
+        if not es_admin(request.user):
+            raise ImmediateHttpResponse(HttpUnauthorized())
+
+        self._meta.object_class.objects.get(pk=request.api['pk']).rechazar()
         return self.create_response(request, {}, HttpOK)
 
 
