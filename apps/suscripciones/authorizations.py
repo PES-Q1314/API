@@ -28,7 +28,3 @@ class SuscripcionAuth(ReadOnlyAuthorization):
         # Una suscripción pueden actualizarla (cambiar el estado)
         # los autores del modelo al que está asociada la suscripción
         return resolver_usuario(bundle.obj.modelo) == bundle.request.user
-
-    def delete_detail(self, object_list, bundle):
-        # Una suscripción solo puede ser eliminada por su autor
-        return resolver_usuario(bundle.obj.suscriptor) == bundle.request.user
