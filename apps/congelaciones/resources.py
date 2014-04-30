@@ -22,7 +22,11 @@ class CongelacionResource(ModelResource):
 
 class RecursoCongelable(ActionResourceMixin, ModelResource):
     congelaciones = fields.ToManyField(CongelacionResource, 'congelaciones', full=True, null=True)
+    esta_congelado = fields.BooleanField()
     modificado_tras_una_congelacion = fields.BooleanField()
+
+    def dehydrate_esta_congelado(self, bundle):
+        return bundle.obj.esta_congelado
 
     def dehydrate_modificado_tras_una_congelacion(self, bundle):
         return bundle.obj.ha_sido_modificado_tras_una_congelacion

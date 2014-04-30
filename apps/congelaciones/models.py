@@ -22,6 +22,10 @@ class ModeloCongelable(models.Model):
         ultima_modificacion = self.fecha_de_ultima_modificacion
         return ultima_congelacion is not None and ultima_modificacion > ultima_congelacion
 
+    @property
+    def esta_congelado(self):
+        return self.congelaciones.all().exists()
+
 
 class Congelacion(models.Model):
     # Apuntador genérico a Modelos Congelables
