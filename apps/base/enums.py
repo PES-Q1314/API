@@ -14,7 +14,7 @@ DISPONIBILIDAD = HORARIO_DE_TRABAJO = (
 
 JORNADA_LABORAL = (
     ('parcial', 'Parcial'),
-    ('total', 'Total')
+    ('completa', 'Completa')
 )
 
 ESTADO_DE_LA_SUSCRIPCION = (
