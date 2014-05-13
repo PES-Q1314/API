@@ -19,8 +19,10 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
     numero_de_puestos_vacantes = models.IntegerField()
     horario = models.CharField(choices=enums.HORARIO_DE_TRABAJO, max_length=50)
     tipo_de_jornada = models.CharField(choices=enums.JORNADA_LABORAL, max_length=50)
+    tipo_de_contrato = models.CharField(choices=enums.TIPO_DE_CONTRATO, max_length=50)
 
     especialidades = models.ManyToManyField(Especialidad, related_name='none+')
+    beneficios_laborales = models.OneToOneField('BeneficiosLaborales')
     ultimo_curso_academico_superado = models.IntegerField(choices=enums.CURSO_ACADEMICO, blank=True, null=True)
     requisitos_de_conocimiento_tecnico = models.ManyToManyField(ConocimientoTecnico,
                                                                 through='RequisitoDeConocimientoTecnico')
@@ -40,6 +42,25 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
     class Meta:
         db_table = 'Oferta'
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.beneficios_laborales = BeneficiosLaborales.objects.create()
+        super().save(*args, **kwargs)
+
+
+class BeneficiosLaborales(models.Model):
+    horario_flexible = models.BooleanField(default=False)
+    vacaciones_ajustables = models.BooleanField(default=False)
+    seguro_de_vida = models.BooleanField(default=False)
+    seguro_medico = models.BooleanField(default=False)
+    posibilidad_de_ascenso = models.BooleanField(default=False)
+    transporte = models.BooleanField(default=False)
+    primas = models.BooleanField(default=False)
+    comidas = models.BooleanField(default=False)
+    trabajo_desde_casa = models.BooleanField(default=False)
+
+    class Meta:
+        db_table = 'BeneficiosLaborales'
 
 
 class RequisitoDeConocimientoTecnico(models.Model):

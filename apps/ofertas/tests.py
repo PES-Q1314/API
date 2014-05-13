@@ -3,7 +3,7 @@ from apps.base.models import SectorDelMercado
 from apps.cuentas.models import SystemUser
 from apps.ofertas.factory import DATOS_OBLIGATORIOS_OFERTA, crear_oferta_de_departamento, crear_oferta_de_empresa, \
     crear_oferta_de_proyecto_emprendedor
-from apps.ofertas.models import OfertaDeProyectoEmprendedor, Oferta
+from apps.ofertas.models import OfertaDeProyectoEmprendedor, Oferta, OfertaDeEmpresa
 from apps.usuarios.factory import crear_estudiante, crear_profesor, crear_empresa
 from tastypie.test import ResourceTestCase
 
@@ -54,48 +54,18 @@ class OfertasResourcesTest(ResourceTestCase):
         self.login(self.creds[1])
         self.assertHttpUnauthorized(self.api_client.post('/api/requisitodeexperiencialaboral/', data=d))
 
-    """
-    def test_tipo(self):
-        crear_oferta_de_empresa()
-        crear_oferta_de_departamento()
-        crear_oferta_de_proyecto_emprendedor()
-        self.login(self.creds[0])
-        resp = self.api_client.get('/api/oferta/')
-        objects = self.deserialize(resp)['objects']
-        for o in objects:
-            print(o['tipo'])
-    """
+    def test_get_beneficios_laborales(self):
+        # Comprobamos que los obtenemos correctamente
+        of = crear_oferta_de_empresa()
+        self.login(self.creds[2])
+        self.assertIsNotNone(of.beneficios_laborales)
+        resp = self.api_client.get('/api/ofertadeempresa/{0}/'.format(of.pk))
+        self.assertHttpOK(resp)
+        self.assertFalse(self.deserialize(resp)['beneficios_laborales']['transporte'])
 
-
-
-"""
-class Ofertas2ResourcesTest(ResourceTestCase):
-    def setUp(self):
-        super().setUp()
-
-        self.creds = [{'username': 'test{0}'.format(i), 'password': '1234'} for i in range(3)]
-        self.users = [
-            SystemUser.objects.create_user(c['username'], '{0}@{0}.upc.edu'.format(c['username']), c['password']) for c
-            in self.creds]
-
-        # 0 es un estudiante, 1 es un profesor, 2 es una empresa, y 3 es una empresa premium
-        self.est = crear_estudiante(self.users[0])
-        self.prof = crear_profesor(self.users[1])
-        self.empr = crear_empresa(self.users[2])
-
-    def login(self, credentials=None):
-        if credentials is None:
-            credentials = self.creds[0]
-        self.assertHttpOK(self.api_client.post('/api/systemuser/login/', data=credentials))
-
-    def test_post_oferta(self):
-        # Cuando posteas una oferta, esta se asocia a ti, y si intentas postear una oferta de un tipo del que no
-        # puedes ser usuario, te devuelve Unauthorized
-        self.login(self.creds[0]) # Estudiante
-        d = DATOS_OBLIGATORIOS_OFERTA
-        self.assertHttpCreated(self.api_client.post('/api/ofertadeproyectoemprendedor/', data=d))
-        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadeempresa/', data=d))
-        self.assertHttpUnauthorized(self.api_client.post('/api/ofertadedepartamento/', data=d))
-
-"""
+        # Comprobamos que los modificamos correctamente (desde el recurso específico)
+        d = {'transporte': True}
+        self.assertHttpAccepted(
+            self.api_client.patch(('/api/beneficioslaborales/{0}'.format(of.beneficios_laborales.pk)), data=d))
+        self.assertTrue(OfertaDeEmpresa.objects.get(pk=of.pk).beneficios_laborales.transporte)
 

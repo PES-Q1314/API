@@ -34,6 +34,19 @@ class OfertaAuth(ReadOnlyAuthorization):
 def get_usuario(oferta):
     return Oferta.objects.get_subclass(id=oferta.id).usuario.usuario
 
+
+class BeneficiosLaboralesAuth(ReadOnlyAuthorization):
+    def update_detail(self, object_list, bundle):
+        return get_usuario(bundle.obj.oferta) == bundle.request.user
+
+    def update_list(self, object_list, bundle):
+        allowed = []
+        for obj in object_list:
+            if get_usuario(obj.oferta) == bundle.request.user:
+                allowed.append(obj)
+        return allowed
+
+
 class OfertaPlusAuth(ReadOnlyAuthorization):
     def create_list(self, object_list, bundle):
         return self._list(object_list, bundle)

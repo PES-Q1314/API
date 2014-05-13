@@ -2,9 +2,9 @@ from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, Sec
     EspecialidadResource
 from apps.congelaciones.resources import RecursoCongelable
 from apps.denuncias.resources import RecursoDenunciable
-from apps.ofertas.authorizations import OfertaAuth, OfertaPlusAuth
+from apps.ofertas.authorizations import OfertaAuth, OfertaPlusAuth, BeneficiosLaboralesAuth
 from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, \
-    RequisitoDeIdioma, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Oferta
+    RequisitoDeIdioma, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Oferta, BeneficiosLaborales
 from apps.suscripciones.resources import RecursoSuscribible
 from apps.usuarios.models import Perfil
 from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource
@@ -17,6 +17,7 @@ from tastypie.resources import ModelResource
 
 class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, ModelResource):
     tipo = fields.CharField(readonly=True)
+    beneficios_laborales = fields.OneToOneField('apps.ofertas.resources.BeneficiosLaboralesResource', 'beneficios_laborales', full=True, null=True)
     especialidades = fields.ToManyField(EspecialidadResource, 'especialidades', full=True, null=True)
 
     requisitos_de_conocimiento_tecnico = fields.ToManyField(
@@ -43,8 +44,12 @@ class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, 
             p = Perfil.objects.get_subclass(usuario=bundle.request.user)
             return super().obj_create(bundle, usuario=p)
         except Exception as e:
-            print(e)
             raise ImmediateHttpResponse(HttpUnauthorized())
+
+
+class BeneficiosLaboralesResource(ModelResource):
+    Meta = MetaGenerica(modelo=BeneficiosLaborales)
+    Meta.authorization = BeneficiosLaboralesAuth()
 
 
 class OfertaDeEmpresaResource(OfertaResource):

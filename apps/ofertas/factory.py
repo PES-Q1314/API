@@ -14,6 +14,7 @@ DATOS_OBLIGATORIOS_OFERTA = {
     'numero_de_puestos_vacantes': 4,
     'horario': enums.HORARIO_DE_TRABAJO[0][0],
     'tipo_de_jornada': enums.JORNADA_LABORAL[1][0],
+    'tipo_de_contrato': enums.TIPO_DE_CONTRATO[0][0],
     'ultimo_curso_academico_superado': enums.CURSO_ACADEMICO[0][0]
 }
 

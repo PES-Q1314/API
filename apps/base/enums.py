@@ -52,6 +52,12 @@ TAMANYO_DE_EMPRESA = (
     ('grande', 'Grande')
 )
 
+TIPO_DE_CONTRATO = (
+    ('practicas', 'Prácticas'),
+    ('indefinido', 'Indefinido'),
+    ('temporal', 'Temporal')
+)
+
 CURSO_ACADEMICO = (
     (1, 'Primero'),
     (2, 'Segundo'),
