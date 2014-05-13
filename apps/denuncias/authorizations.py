@@ -10,7 +10,11 @@ class DenunciaAuth(ReadOnlyAuthorization):
         if es_admin(bundle.request.user):
             return object_list
         else:
-            return object_list.filter(denunciante__usuario=bundle.request.user)
+            allowed = []
+            for obj in object_list:
+                if resolver_usuario(bundle.obj.denunciante) == bundle.request.user:
+                    allowed.append(obj)
+            return allowed
 
     def read_detail(self, object_list, bundle):
         return es_admin(bundle.request.user) or resolver_usuario(bundle.obj.denunciante) == bundle.request.user

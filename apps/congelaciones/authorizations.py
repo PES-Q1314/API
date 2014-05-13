@@ -10,11 +10,11 @@ class CongelacionAuth(ReadOnlyAuthorization):
         if es_admin(bundle.request.user):
             return object_list
         else:
-            # Como el elemento congelable puede ser un perfil o una oferta, hemos de considerar ambas opciones
-            try:
-                return object_list.filter(modelo__usuario__usuario=bundle.request.user)
-            except:
-                return object_list.filter(modelo__usuario=bundle.request.user)
+            allowed = []
+            for obj in object_list:
+                if (resolver_usuario(bundle.obj.modelo) == bundle.request.user):
+                    allowed.append(obj)
+            return allowed
 
     def read_detail(self, object_list, bundle):
         return es_admin(bundle.request.user) or (resolver_usuario(bundle.obj.modelo) == bundle.request.user)
