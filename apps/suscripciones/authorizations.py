@@ -8,8 +8,11 @@ from tastypie.exceptions import Unauthorized
 class SuscripcionAuth(ReadOnlyAuthorization):
     def read_list(self, object_list, bundle):
         # Una suscripción pueden verla los suscriptores y los autores del modelo al que está asociada la suscripción
-        return object_list.filter(
-            Q(suscriptor__usuario=bundle.request.user) | Q(modelo__usuario__usuario=bundle.request.user))
+        allowed = []
+        for obj in object_list:
+            if bundle.request.user in (resolver_usuario(bundle.obj.suscriptor), resolver_usuario(bundle.obj.modelo)):
+                allowed.append(obj)
+        return allowed
 
     def read_detail(self, object_list, bundle):
         return bundle.request.user in (resolver_usuario(bundle.obj.suscriptor), resolver_usuario(bundle.obj.modelo))
