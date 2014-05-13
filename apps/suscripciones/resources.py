@@ -18,7 +18,7 @@ class SuscripcionResource(ModelResource):
     Meta.authorization = SuscripcionAuth()
 
     def obj_create(self, bundle, **kwargs):
-        return super(SuscripcionResource, self).obj_create(bundle, autor=bundle.request.user.perfil)
+        return super(SuscripcionResource, self).obj_create(bundle, usuario=bundle.request.user.perfil)
 
     def delete_detail(self, request, **kwargs):
         try:
