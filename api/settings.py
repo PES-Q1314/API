@@ -22,7 +22,7 @@ SECRET_KEY = '1vt2h1=g+@y=-zy6oiw$3n&dy3ap5m58@s&t5c9q9b*h)eb(rz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-DEPLOY = False
+DEPLOY = True
 
 TEMPLATE_DEBUG = True
 
