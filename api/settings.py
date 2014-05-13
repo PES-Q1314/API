@@ -22,6 +22,7 @@ SECRET_KEY = '1vt2h1=g+@y=-zy6oiw$3n&dy3ap5m58@s&t5c9q9b*h)eb(rz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+DEPLOY = False
 
 TEMPLATE_DEBUG = True
 
@@ -109,7 +110,7 @@ TASTYPIE_ALLOW_MISSING_SLASH = True
 
 
 # Parse database configuration from $DATABASE_URL
-if not DEBUG:
+if DEPLOY:
     import dj_database_url
     DATABASES['default'] = dj_database_url.config()
 
