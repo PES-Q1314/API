@@ -36,11 +36,16 @@ class Oferta(ModeloDenunciable, ModeloCongelable, ModeloSuscribible, models.Mode
 
     # Metadatos de la oferta
     fecha_de_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_de_eliminacion = models.DateTimeField(null=True, blank=True)
 
     objects = InheritanceManager()
 
     class Meta:
         db_table = 'Oferta'
+
+    @property
+    def activa(self):
+        return self.fecha_de_eliminacion is None
 
     def save(self, *args, **kwargs):
         if not self.pk:

@@ -17,7 +17,9 @@ from tastypie.resources import ModelResource
 
 class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, ModelResource):
     tipo = fields.CharField(readonly=True)
-    beneficios_laborales = fields.OneToOneField('apps.ofertas.resources.BeneficiosLaboralesResource', 'beneficios_laborales', full=True, null=True)
+    activa = fields.BooleanField(attribute='activa', readonly=True)
+    beneficios_laborales = fields.OneToOneField('apps.ofertas.resources.BeneficiosLaboralesResource',
+                                                'beneficios_laborales', full=True, null=True)
     especialidades = fields.ToManyField(EspecialidadResource, 'especialidades', full=True, null=True)
 
     requisitos_de_conocimiento_tecnico = fields.ToManyField(
