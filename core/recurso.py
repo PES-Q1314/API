@@ -23,3 +23,4 @@ class MetaGenerica:
         self.authentication = SystemAuthentication()
         self.filtering = get_complete_filtering(modelo)
         self.ordering = get_complete_ordering(modelo)
+        self.always_return_data = True
