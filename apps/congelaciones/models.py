@@ -8,6 +8,7 @@ from django.db import models
 class ModeloCongelable(models.Model):
     congelaciones = GenericRelation('Congelacion')
     fecha_de_ultima_modificacion = models.DateTimeField(auto_now=True)
+    esta_congelado = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -22,10 +23,6 @@ class ModeloCongelable(models.Model):
         ultima_modificacion = self.fecha_de_ultima_modificacion
         return ultima_congelacion is not None and ultima_modificacion > ultima_congelacion
 
-    @property
-    def esta_congelado(self):
-        return self.congelaciones.all().exists()
-
 
 class Congelacion(models.Model):
     # Apuntador genérico a Modelos Congelables
@@ -39,6 +36,13 @@ class Congelacion(models.Model):
 
     class Meta:
         db_table = 'Congelacion'
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.modelo.esta_congelado = self.modelo.congelaciones.filter(estado='pendiente').exists()
+        self.modelo.save()
+
 
 
 
