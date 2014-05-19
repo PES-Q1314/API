@@ -1,4 +1,5 @@
 from apps.ofertas.models import Oferta
+from core.autorizacion import es_admin
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
@@ -21,14 +22,10 @@ class OfertaAuth(ReadOnlyAuthorization):
         return bundle.obj.usuario.usuario == bundle.request.user
 
     def delete_list(self, object_list, bundle):
-        allowed = []
-        for obj in object_list:
-            if obj.autor.usuario == bundle.request.user:
-                allowed.append(obj)
-        return allowed
+        return object_list if es_admin(bundle.request.user) else []
 
     def delete_detail(self, object_list, bundle):
-        return bundle.obj.usuario.usuario == bundle.request.user
+        return es_admin(bundle.request.user)
 
 
 def get_usuario(oferta):

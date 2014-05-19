@@ -56,16 +56,16 @@ class OfertasResourcesTest(ResourceTestCase):
 
     def test_get_beneficios_laborales(self):
         # Comprobamos que los obtenemos correctamente
-        of = crear_oferta_de_empresa()
+        of = crear_oferta_de_empresa(u=self.empr, extras=False)
         self.login(self.creds[2])
         self.assertIsNotNone(of.beneficios_laborales)
         resp = self.api_client.get('/api/ofertadeempresa/{0}/'.format(of.pk))
         self.assertHttpOK(resp)
-        self.assertFalse(self.deserialize(resp)['beneficios_laborales']['transporte'])
+        before = self.deserialize(resp)['beneficios_laborales']['transporte']
 
         # Comprobamos que los modificamos correctamente (desde el recurso específico)
-        d = {'transporte': True}
+        d = {'transporte': not before}
         self.assertHttpAccepted(
             self.api_client.patch(('/api/beneficioslaborales/{0}'.format(of.beneficios_laborales.pk)), data=d))
-        self.assertTrue(OfertaDeEmpresa.objects.get(pk=of.pk).beneficios_laborales.transporte)
+        self.assertEqual(OfertaDeEmpresa.objects.get(pk=of.pk).beneficios_laborales.transporte, d['transporte'])
 

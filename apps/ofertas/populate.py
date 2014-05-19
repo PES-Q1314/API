@@ -3,14 +3,14 @@ from apps.ofertas.factory import crear_oferta_de_empresa, crear_oferta_de_depart
 
 # CREAMOS OFERTAS DE EMPRESA
 for i in range(50):
-    crear_oferta_de_empresa(i)
+    crear_oferta_de_empresa()
 
 
 # CREAMOS OFERTAS DE DEPARTAMENTO
 for i in range(50):
-    crear_oferta_de_departamento(i)
+    crear_oferta_de_departamento()
 
 
 # CREAMOS OFERTAS DE PROYECTOS EMPRENDEDORES
 for i in range(50):
-    crear_oferta_de_proyecto_emprendedor(i)
+    crear_oferta_de_proyecto_emprendedor()
