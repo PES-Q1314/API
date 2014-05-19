@@ -8,6 +8,8 @@ from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico,
 from apps.suscripciones.resources import RecursoSuscribible
 from apps.usuarios.models import Perfil
 from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource
+from core.accion import ActionResourceMixin, action, response
+from core.http import HttpOK
 from core.recurso import MetaGenerica
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
@@ -17,9 +19,8 @@ from tastypie.resources import ModelResource
 
 class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, ModelResource):
     tipo = fields.CharField(readonly=True)
-    activa = fields.BooleanField(attribute='activa', readonly=True)
     beneficios_laborales = fields.OneToOneField('apps.ofertas.resources.BeneficiosLaboralesResource',
-                                                'beneficios_laborales', full=True, null=True)
+                                                'beneficios_laborales', full=True, null=True, readonly=True)
     especialidades = fields.ToManyField(EspecialidadResource, 'especialidades', full=True, null=True)
 
     requisitos_de_conocimiento_tecnico = fields.ToManyField(
