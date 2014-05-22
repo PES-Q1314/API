@@ -1,6 +1,9 @@
 from tastypie.api import Api
 from tastypie.resources import ModelResource
 
+api = Api(api_name="api")
+name_to_resource = {}
+
 
 def resource_discover():
     from django.conf import settings
@@ -17,6 +20,7 @@ def resource_discover():
                                              # i.e. avoid imported stuff
                                              lambda x: inspect.getmodule(x) == module)
             except ImportError as e:
+                print(e)
                 members = []
 
             for name, member in members:
@@ -27,6 +31,8 @@ def resource_discover():
 
 
 resources = resource_discover()
-api = Api(api_name="api")
 for resource in resources:
-    api.register(resource())
+    instance = resource()
+    name_to_resource[instance._meta.resource_name] = instance
+    api.register(instance)
+

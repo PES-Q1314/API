@@ -8,7 +8,7 @@ from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico,
 from apps.usuarios.models import Empresa, Profesor, Estudiante
 
 
-PUESTOS = ['Community Manager', 'Analista', 'Arquitecto', 'Administrador', 'Diseñador gráfico', 'Ingeniero químico', 'Ingeniero mecánico', 'Ingeniero bioquímico', 'Desarrollador', 'Programador', 'Project manager', 'Experto en Marketing']
+PUESTOS = ['Community Manager', 'Analista de sistemas', 'Arquitecto', 'Administrador de Bases de Datos', 'Diseñador gráfico', 'Ingeniero químico', 'Ingeniero mecánico', 'Ingeniero bioquímico', 'Desarrollador', 'Programador', 'Project manager', 'Experto en Marketing']
 DIRECCIONES = ['C/ Esports 1', 'Avg Diagonal 213', 'Av Meridiana 187', 'Plç Espanya 3', 'C/ Mallorca 43',
                'C/ Balmes 3', 'Passeig de Gracia, 34']
 DESCRIPCIONES = [

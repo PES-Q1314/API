@@ -11,7 +11,7 @@ from core.autorizacion import es_admin
 from core.http import HttpOK
 from core.recurso import MetaGenerica
 from tastypie import fields
-from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
+from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized
 from tastypie.resources import ModelResource
 

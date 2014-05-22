@@ -87,7 +87,9 @@ class SuscripcionesResourcesTest(ResourceTestCase):
         self.assertHttpOK(self.api_client.get('/api/suscripcion/{0}'.format(d.pk)))
 
         self.login(self.creds[2])  # Como empresa que crea la oferta también
-        self.assertHttpOK(self.api_client.get('/api/suscripcion/{0}'.format(d.pk)))
+        resp=self.api_client.get('/api/suscripcion/{0}'.format(d.pk))
+        print(self.deserialize(resp))
+        self.assertHttpOK(resp)
 
     def test_dessuscribirse(self):
         d = Suscripcion.objects.create(modelo=self.of, suscriptor=self.est, estado='aceptada')

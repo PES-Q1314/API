@@ -1,3 +1,4 @@
+from api.api import name_to_resource
 from core.autenticacion import SystemAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.constants import ALL_WITH_RELATIONS
@@ -13,6 +14,10 @@ def get_complete_filtering(model):
 
 def get_complete_ordering(model):
     return [f.name for f in get_model_fields(model)]
+
+
+def get_resource_by_name(name):
+    return name_to_resource[name]
 
 
 class MetaGenerica:

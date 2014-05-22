@@ -1,12 +1,11 @@
 # coding=utf-8
 from apps.suscripciones.authorizations import SuscripcionAuth
-from apps.suscripciones.models import Suscripcion, PerfilSuscriptor
+from apps.suscripciones.models import Suscripcion
 from apps.usuarios.models import Perfil
 from core.accion import action, response, ActionResourceMixin
 from core.autorizacion import es_perfil_suscriptor
 from core.http import HttpOK
-from core.recurso import MetaGenerica
-from django.core.exceptions import ObjectDoesNotExist
+from core.recurso import MetaGenerica, get_resource_by_name
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
@@ -16,6 +15,14 @@ from tastypie.resources import ModelResource
 class SuscripcionResource(ModelResource):
     Meta = MetaGenerica(modelo=Suscripcion)
     Meta.authorization = SuscripcionAuth()
+
+    def dehydrate(self, bundle):
+        bundle.data['oferta'] = {
+            'titulo': bundle.obj.modelo.titulo,
+            'usuario': bundle.obj.modelo.usuario.nombre,
+            'fecha': bundle.obj.modelo.fecha_de_creacion
+        }
+        return bundle
 
     def obj_create(self, bundle, **kwargs):
         return super(SuscripcionResource, self).obj_create(bundle, usuario=bundle.request.user.perfil)
@@ -40,7 +47,7 @@ class RecursoSuscribible(ActionResourceMixin, ModelResource):
     @response(HttpOK, "Suscrito correctamente al elemento")
     @response(HttpUnauthorized, "No está autorizado para realizar esta acción")
     @response(HttpBadRequest, "No es posible suscribirse al elemento")
-    def suscribirse(self, request):
+    def suscribirse(self, request, **kwargs):
         if not es_perfil_suscriptor(request.user):
             raise ImmediateHttpResponse(HttpUnauthorized())
         try:
@@ -55,11 +62,10 @@ class RecursoSuscribible(ActionResourceMixin, ModelResource):
     @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "La suscripcion al elemento ha sido eliminada correctamente")
     @response(HttpBadRequest, "No es posible eliminar esta suscripcion")
-    def dessuscribirse(self, request):
+    def dessuscribirse(self, request, **kwargs):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
             modelo.suscripcion_del_usuario(Perfil.objects.get_subclass(usuario=request.user)).delete()
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())
-
