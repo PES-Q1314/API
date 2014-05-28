@@ -2,13 +2,13 @@ from apps.cuentas.models import SystemUser
 from apps.usuarios.models import Perfil
 from core.accion import ActionResourceMixin, action, response
 from core.http import HttpOK
+from core.recurso import RecursoGenerico
 from django.contrib import auth
 from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.exceptions import Unauthorized, ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized, HttpForbidden, HttpCreated, HttpBadRequest
-from tastypie.resources import ModelResource
 
 
 class SystemUserAuthorization(Authorization):
@@ -38,7 +38,7 @@ class SystemUserAuthorization(Authorization):
 
 
 
-class SystemUserResource(ActionResourceMixin, ModelResource):
+class SystemUserResource(ActionResourceMixin, RecursoGenerico):
     tipo = fields.CharField(null=True, blank=True, readonly=True)
 
     class Meta:

@@ -9,15 +9,14 @@ from apps.usuarios.models import Estudiante, Profesor, Empresa, EstudianteTieneC
 from core.accion import action, response, ActionResourceMixin
 from core.autorizacion import es_admin
 from core.http import HttpOK
-from core.recurso import MetaGenerica
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
 
-class EstudianteResource(RecursoDenunciable, RecursoCongelable, ModelResource):
+class EstudianteResource(RecursoDenunciable, RecursoCongelable, RecursoGenerico):
     conocimientos_tecnicos = fields.ToManyField('apps.usuarios.resources.EstudianteTieneConocimientoTecnicoResource',
                                                 'conocimiento_tecnico_set', full=True, null=True)
     experiencia_laboral = fields.ToManyField('apps.usuarios.resources.EstudianteTieneExperienciaLaboralResource',
@@ -28,13 +27,13 @@ class EstudianteResource(RecursoDenunciable, RecursoCongelable, ModelResource):
     Meta.authorization = ClosedProfileAuth()
 
 
-class ProfesorResource(RecursoDenunciable, RecursoCongelable, ModelResource):
+class ProfesorResource(RecursoDenunciable, RecursoCongelable, RecursoGenerico):
     Meta = MetaGenerica(modelo=Profesor)
     Meta.authorization = ClosedProfileAuth()
 
 
 class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnLaListaNegra, ActionResourceMixin,
-                      ModelResource):
+                      RecursoGenerico):
     Meta = MetaGenerica(modelo=Empresa)
     Meta.authorization = OpenProfileAuth()
 
@@ -82,7 +81,7 @@ class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnL
 # RELACIONES M2M #
 ##################
 
-class EstudiantePlusMixin(ModelResource):
+class EstudiantePlusMixin(RecursoGenerico):
     # Asociamos la creación de una relación al perfil del estudiante que hace la request
     def obj_create(self, bundle, **kwargs):
         p = Perfil.objects.get_subclass(usuario=bundle.request.user)
@@ -91,19 +90,19 @@ class EstudiantePlusMixin(ModelResource):
         else:
             raise ImmediateHttpResponse(HttpUnauthorized())
 
-class EstudianteTieneConocimientoTecnicoResource(EstudiantePlusMixin, ModelResource):
+class EstudianteTieneConocimientoTecnicoResource(EstudiantePlusMixin, RecursoGenerico):
     conocimiento = fields.ForeignKey(ConocimientoTecnicoResource, 'conocimiento', full=True)
     Meta = MetaGenerica(modelo=EstudianteTieneConocimientoTecnico)
     Meta.authorization = EstudiantePlusAuth()
 
 
-class EstudianteTieneExperienciaLaboralResource(EstudiantePlusMixin, ModelResource):
+class EstudianteTieneExperienciaLaboralResource(EstudiantePlusMixin, RecursoGenerico):
     sector = fields.ForeignKey(SectorDelMercadoResource, 'sector', full=True)
     Meta = MetaGenerica(modelo=EstudianteTieneExperienciaLaboral)
     Meta.authorization = EstudiantePlusAuth()
 
 
-class EstudianteHablaIdiomaResource(EstudiantePlusMixin, ModelResource):
+class EstudianteHablaIdiomaResource(EstudiantePlusMixin, RecursoGenerico):
     idioma = fields.ForeignKey(IdiomaResource, 'idioma', full=True)
     Meta = MetaGenerica(modelo=EstudianteHablaIdioma)
     Meta.authorization = EstudiantePlusAuth()

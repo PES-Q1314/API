@@ -4,20 +4,18 @@ from apps.usuarios.models import Perfil
 from core.accion import ActionResourceMixin, action, response
 from core.autorizacion import es_perfil_denunciante, es_admin
 from core.http import HttpOK
-from core.recurso import MetaGenerica
-from django.core.exceptions import ObjectDoesNotExist
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
-class DenunciaResource(ModelResource):
+class DenunciaResource(RecursoGenerico):
     Meta = MetaGenerica(modelo=Denuncia)
     Meta.authorization = DenunciaAuth()
 
 
-class RecursoDenunciable(ActionResourceMixin, ModelResource):
+class RecursoDenunciable(ActionResourceMixin, RecursoGenerico):
     denuncias = fields.ToManyField(DenunciaResource, 'denuncias', full=True, null=True)
 
     @action(allowed=('post',), static=False, login_required=True)

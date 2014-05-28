@@ -1,7 +1,5 @@
-from core.autorizacion import es_admin, es_perfil_denunciante, es_perfil_suscriptor
+from core.autorizacion import es_perfil_suscriptor, ReadOnlyAuthorization
 from core.modelo import resolver_usuario
-from django.db.models import Q
-from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
 
@@ -10,7 +8,7 @@ class SuscripcionAuth(ReadOnlyAuthorization):
         # Una suscripción pueden verla los suscriptores y los autores del modelo al que está asociada la suscripción
         allowed = []
         for obj in object_list:
-            if bundle.request.user in (resolver_usuario(bundle.obj.suscriptor), resolver_usuario(bundle.obj.modelo)):
+            if bundle.request.user in (resolver_usuario(obj.suscriptor), resolver_usuario(obj.modelo)):
                 allowed.append(obj)
         return allowed
 

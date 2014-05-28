@@ -1,7 +1,5 @@
 from apps.ofertas.models import Oferta
-from core.autorizacion import es_admin
-from tastypie.authorization import ReadOnlyAuthorization
-from tastypie.exceptions import Unauthorized
+from core.autorizacion import es_admin, ReadOnlyAuthorization
 
 
 class OfertaAuth(ReadOnlyAuthorization):

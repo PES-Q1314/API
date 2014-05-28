@@ -8,16 +8,13 @@ from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico,
 from apps.suscripciones.resources import RecursoSuscribible
 from apps.usuarios.models import Perfil
 from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource
-from core.accion import ActionResourceMixin, action, response
-from core.http import HttpOK
-from core.recurso import MetaGenerica
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
-class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, ModelResource):
+class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, RecursoGenerico):
     tipo = fields.CharField(readonly=True)
     beneficios_laborales = fields.OneToOneField('apps.ofertas.resources.BeneficiosLaboralesResource',
                                                 'beneficios_laborales', full=True, null=True, readonly=True)
@@ -50,7 +47,7 @@ class OfertaResource(RecursoDenunciable, RecursoCongelable, RecursoSuscribible, 
             raise ImmediateHttpResponse(HttpUnauthorized())
 
 
-class BeneficiosLaboralesResource(ModelResource):
+class BeneficiosLaboralesResource(RecursoGenerico):
     Meta = MetaGenerica(modelo=BeneficiosLaborales)
     Meta.authorization = BeneficiosLaboralesAuth()
 
@@ -77,23 +74,23 @@ class OfertaDeProyectoEmprendedorResource(OfertaResource):
 # RELACIONES M2M #
 ##################
 
-class RequisitoPlusMixin(ModelResource):
+class RequisitoPlusMixin(RecursoGenerico):
     oferta = fields.ForeignKey(OfertaResource, 'oferta')
 
 
-class RequisitoDeConocimientoTecnicoResource(RequisitoPlusMixin, ModelResource):
+class RequisitoDeConocimientoTecnicoResource(RequisitoPlusMixin, RecursoGenerico):
     conocimiento = fields.ForeignKey(ConocimientoTecnicoResource, 'conocimiento', full=True)
     Meta = MetaGenerica(modelo=RequisitoDeConocimientoTecnico)
     Meta.authorization = OfertaPlusAuth()
 
 
-class RequisitoDeExperienciaLaboralResource(RequisitoPlusMixin, ModelResource):
+class RequisitoDeExperienciaLaboralResource(RequisitoPlusMixin, RecursoGenerico):
     sector = fields.ForeignKey(SectorDelMercadoResource, 'sector', full=True)
     Meta = MetaGenerica(modelo=RequisitoDeExperienciaLaboral)
     Meta.authorization = OfertaPlusAuth()
 
 
-class RequisitoDeIdiomaResource(RequisitoPlusMixin, ModelResource):
+class RequisitoDeIdiomaResource(RequisitoPlusMixin, RecursoGenerico):
     idioma = fields.ForeignKey(IdiomaResource, 'idioma', full=True)
     Meta = MetaGenerica(modelo=RequisitoDeIdioma)
     Meta.authorization = OfertaPlusAuth()

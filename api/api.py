@@ -1,3 +1,4 @@
+from core.recurso import RecursoGenerico
 from tastypie.api import Api
 from tastypie.resources import ModelResource
 
@@ -24,7 +25,7 @@ def resource_discover():
                 members = []
 
             for name, member in members:
-                if name.endswith('Resource') and issubclass(member, ModelResource):
+                if name.endswith('Resource') and issubclass(member, RecursoGenerico):
                     resources.append(member)
 
     return resources

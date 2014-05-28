@@ -1,6 +1,12 @@
 from apps.denuncias.models import PerfilDenunciante
 from apps.suscripciones.models import PerfilSuscriptor
 from apps.usuarios.models import Estudiante, Empresa, Profesor, Administrador, Perfil, Directivo
+import tastypie
+
+
+class ReadOnlyAuthorization(tastypie.authorization.ReadOnlyAuthorization):
+    def schema(self, bundle):
+        return True
 
 
 def es_empresa(u):

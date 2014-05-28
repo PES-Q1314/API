@@ -3,18 +3,17 @@ from apps.lista_negra.models import ElementoDeLaListaNegra
 from core.accion import ActionResourceMixin, action, response
 from core.autorizacion import es_admin
 from core.http import HttpOK
-from core.recurso import MetaGenerica
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
-class ElementoDeLaListaNegraResource(ModelResource):
+class ElementoDeLaListaNegraResource(RecursoGenerico):
     Meta = MetaGenerica(modelo=ElementoDeLaListaNegra)
     Meta.authorization = ListaNegraAuth()
 
 
-class RecursoIncluibleEnLaListaNegra(ActionResourceMixin, ModelResource):
+class RecursoIncluibleEnLaListaNegra(ActionResourceMixin, RecursoGenerico):
 
     @action(allowed=('post',), static=False, login_required=True)
     @response(HttpOK, "Elemento añadido a la lista negra")

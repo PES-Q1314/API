@@ -1,5 +1,4 @@
-from core.autorizacion import es_admin, es_perfil_denunciante
-from tastypie.authorization import ReadOnlyAuthorization
+from core.autorizacion import es_admin, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
 

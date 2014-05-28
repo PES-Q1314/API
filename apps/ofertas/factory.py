@@ -7,6 +7,8 @@ from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico,
     RequisitoDeExperienciaLaboral, OfertaDeDepartamento, OfertaDeProyectoEmprendedor
 from apps.usuarios.models import Empresa, Profesor, Estudiante
 
+RANDSEED = 1234  # Use 'static' seed to generate always the same profiles.
+random.seed(RANDSEED)  # Use None to produce different profiles every time.
 
 PUESTOS = ['Community Manager', 'Analista de sistemas', 'Arquitecto', 'Administrador de Bases de Datos', 'Diseñador gráfico', 'Ingeniero químico', 'Ingeniero mecánico', 'Ingeniero bioquímico', 'Desarrollador', 'Programador', 'Project manager', 'Experto en Marketing']
 DIRECCIONES = ['C/ Esports 1', 'Avg Diagonal 213', 'Av Meridiana 187', 'Plç Espanya 3', 'C/ Mallorca 43',

@@ -1,6 +1,4 @@
-from apps.usuarios.models import Empresa, Estudiante
-from core.autorizacion import es_empresa_no_premium, es_estudiante
-from tastypie.authorization import ReadOnlyAuthorization
+from core.autorizacion import es_empresa_no_premium, es_estudiante, ReadOnlyAuthorization
 from tastypie.exceptions import Unauthorized
 
 

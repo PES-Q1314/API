@@ -1,5 +1,6 @@
 # coding=utf-8
 from apps.base import enums
+from core.modelo import resolver_usuario
 from django.contrib.contenttypes.generic import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -48,6 +49,14 @@ class Suscripcion(models.Model):
 
     class YaValorada(Exception):
         pass
+
+    class MismoUsuario(Exception):
+        pass
+
+    def save(self, *args, **kwargs):
+        if resolver_usuario(self.modelo) == resolver_usuario(self.suscriptor):
+            raise Suscripcion.MismoUsuario
+        super().save(*args, **kwargs)
 
     def delete(self, using=None):
         if self.estado != 'pendiente':

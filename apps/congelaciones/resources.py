@@ -5,22 +5,20 @@ from apps.usuarios.models import Perfil, Administrador
 from core.accion import ActionResourceMixin, action, response
 from core.autorizacion import es_admin
 from core.http import HttpOK
-from core.modelo import resolver_usuario
-from core.recurso import MetaGenerica
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
 
 
-class CongelacionResource(ModelResource):
+class CongelacionResource(RecursoGenerico):
     Meta = MetaGenerica(modelo=Congelacion)
     Meta.authorization = CongelacionAuth()
 
 
-class RecursoCongelable(ActionResourceMixin, ModelResource):
+class RecursoCongelable(ActionResourceMixin, RecursoGenerico):
     congelaciones = fields.ToManyField(CongelacionResource, 'congelaciones', full=True, null=True)
     modificado_tras_una_congelacion = fields.BooleanField()
 

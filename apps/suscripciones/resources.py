@@ -5,22 +5,21 @@ from apps.usuarios.models import Perfil
 from core.accion import action, response, ActionResourceMixin
 from core.autorizacion import es_perfil_suscriptor
 from core.http import HttpOK
-from core.recurso import MetaGenerica, get_resource_by_name
+from core.recurso import MetaGenerica, RecursoGenerico
 from tastypie import fields
 from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpBadRequest, HttpUnauthorized
-from tastypie.resources import ModelResource
 
 
-class SuscripcionResource(ModelResource):
+class SuscripcionResource(RecursoGenerico):
     Meta = MetaGenerica(modelo=Suscripcion)
     Meta.authorization = SuscripcionAuth()
 
     def dehydrate(self, bundle):
         bundle.data['oferta'] = {
             'titulo': bundle.obj.modelo.titulo,
-            'usuario': bundle.obj.modelo.usuario.nombre,
-            'fecha': bundle.obj.modelo.fecha_de_creacion
+            'fecha': bundle.obj.modelo.fecha_de_creacion,
+            'usuario': bundle.obj.modelo.usuario.nombre if hasattr(bundle.obj.modelo, 'usuario') else ''
         }
         return bundle
 
@@ -34,7 +33,7 @@ class SuscripcionResource(ModelResource):
             raise ImmediateHttpResponse(HttpBadRequest())
 
 
-class RecursoSuscribible(ActionResourceMixin, ModelResource):
+class RecursoSuscribible(ActionResourceMixin, RecursoGenerico):
     estado_de_la_suscripcion = fields.CharField(readonly=True, use_in='detail')
     suscripciones = fields.ToManyField(SuscripcionResource, 'suscripciones', full=True, null=True)
 
