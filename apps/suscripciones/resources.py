@@ -19,8 +19,16 @@ class SuscripcionResource(RecursoGenerico):
         bundle.data['oferta'] = {
             'titulo': bundle.obj.modelo.titulo,
             'fecha': bundle.obj.modelo.fecha_de_creacion,
-            'usuario': bundle.obj.modelo.usuario.nombre if hasattr(bundle.obj.modelo, 'usuario') else ''
+
         }
+        if hasattr(bundle.obj.modelo, 'usuario'):
+            bundle.data['oferta']['usuario'] = bundle.obj.modelo.usuario.usuario.username
+            bundle.data['oferta']['autor'] = bundle.obj.modelo.usuario.nombre
+
+        bundle.data['suscriptor'] = {
+            'nombre': bundle.obj.suscriptor.nombre
+        }
+
         return bundle
 
     def obj_create(self, bundle, **kwargs):
@@ -51,8 +59,9 @@ class RecursoSuscribible(ActionResourceMixin, RecursoGenerico):
             raise ImmediateHttpResponse(HttpUnauthorized())
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
+            of = modelo.__class__.objects.get_subclass(pk=modelo.pk) if hasattr(modelo.__class__.objects, 'get_subclass') else modelo
             suscriptor = Perfil.objects.get_subclass(usuario=request.user)
-            Suscripcion.objects.create(modelo=modelo, suscriptor=suscriptor)
+            Suscripcion.objects.create(modelo=of, suscriptor=suscriptor)
             return self.create_response(request, {}, HttpOK)
         except Exception as e:
             raise ImmediateHttpResponse(HttpBadRequest())
@@ -64,7 +73,8 @@ class RecursoSuscribible(ActionResourceMixin, RecursoGenerico):
     def dessuscribirse(self, request, **kwargs):
         try:
             modelo = self._meta.object_class.objects.get(pk=request.api['pk'])
-            modelo.suscripcion_del_usuario(Perfil.objects.get_subclass(usuario=request.user)).delete()
+            s = modelo.__class__.objects.get_subclass(pk=modelo.pk) if hasattr(modelo.__class__.objects, 'get_subclass') else modelo
+            s.suscripcion_del_usuario(Perfil.objects.get_subclass(usuario=request.user)).delete()
             return self.create_response(request, {}, HttpOK)
         except Exception:
             raise ImmediateHttpResponse(HttpBadRequest())

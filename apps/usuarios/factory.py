@@ -1,15 +1,19 @@
 from datetime import date
+import random
 from apps.base import enums
 from apps.base.factory import crear_especialidad, crear_departamento, crear_sector, crear_conocimiento, crear_idioma
 from apps.base.models import Especialidad, ConocimientoTecnico, Idioma, SectorDelMercado, Departamento
 from apps.usuarios.models import Estudiante, EstudianteTieneConocimientoTecnico, EstudianteHablaIdioma, \
     EstudianteTieneExperienciaLaboral, Profesor, Empresa, Administrador
 
+NOMBRES = ['Maria', 'Anna', 'Xavi', 'Roberto', 'Marc', 'Eduard', 'Hector', 'Francesc']
+APELLIDOS = ['Matas', 'Llorca', 'Borges', 'Capdevila', 'Fernandez', 'Martinez']
+EMPRESAS = ['Acme', 'Google', 'Microsoft', 'AGBAR', 'Everis']
 
 def crear_estudiante(u):
     datos = {
         'usuario': u,
-        'nombre': u.username,
+        'nombre': '{0} {1}{2}'.format(random.choice(NOMBRES), random.choice(APELLIDOS), u.id),
         'dni': str(u.id),
         'fecha_de_nacimiento': date(day=1, month=4, year=1990),
         'sexo': enums.SEXO[0][0],
@@ -43,7 +47,7 @@ def crear_estudiante(u):
 def crear_profesor(u):
     datos = {
         'usuario': u,
-        'nombre': u.username,
+        'nombre': '{0} {1}{2}'.format(random.choice(NOMBRES), random.choice(APELLIDOS), u.id),
         'departamento': Departamento.objects.first() if Departamento.objects.exists() else crear_departamento(),
         'url_upc': 'http://directori.upc.edu/directori/dadesPersona.jsp;jsessionid=B88FF6EEE9F066F2A826A87EA9FBF63E?id=100185{0}'.format(u.id%10)
     }
@@ -53,7 +57,7 @@ def crear_profesor(u):
 def crear_empresa(u, es_premium=False):
     datos = {
         'usuario': u,
-        'nombre': u.username,
+        'nombre': "{0}{1}".format(random.choice(EMPRESAS), u.id),
         'cif': str(u.id),
         'sector': SectorDelMercado.objects.first() if SectorDelMercado.objects.exists() else crear_sector(),
         'tamanyo': enums.TAMANYO_DE_EMPRESA[0][0],
@@ -71,7 +75,7 @@ def crear_empresa(u, es_premium=False):
 def crear_administrador(u):
     datos = {
         'usuario': u,
-        'nombre': u.username,
+        'nombre': '{0} {1}{2}'.format(random.choice(NOMBRES), random.choice(APELLIDOS), u.id),
     }
     admin = Administrador.objects.create(**datos)
     return admin
