@@ -4,7 +4,7 @@ from apps.base.models import ConocimientoTecnico, SectorDelMercado, Idioma, Espe
 from apps.congelaciones.models import ModeloCongelable
 from apps.denuncias.models import ModeloDenunciable
 from apps.suscripciones.models import ModeloSuscribible
-from apps.usuarios.models import Empresa, Profesor, Estudiante, Perfil
+from apps.usuarios.models import Empresa, Profesor, Estudiante
 from django.db import models
 from model_utils.managers import InheritanceManager
 

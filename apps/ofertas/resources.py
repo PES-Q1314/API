@@ -3,8 +3,8 @@ from apps.base.resources import ConocimientoTecnicoResource, IdiomaResource, Sec
 from apps.congelaciones.resources import RecursoCongelable
 from apps.denuncias.resources import RecursoDenunciable
 from apps.ofertas.authorizations import OfertaAuth, OfertaPlusAuth, BeneficiosLaboralesAuth
-from apps.ofertas.models import OfertaDeEmpresa, RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, \
-    RequisitoDeIdioma, OfertaDeProyectoEmprendedor, OfertaDeDepartamento, Oferta, BeneficiosLaborales
+from apps.ofertas.models import RequisitoDeConocimientoTecnico, RequisitoDeExperienciaLaboral, RequisitoDeIdioma, \
+    OfertaDeProyectoEmprendedor, OfertaDeDepartamento, OfertaDeEmpresa, BeneficiosLaborales, Oferta
 from apps.suscripciones.resources import RecursoSuscribible
 from apps.usuarios.models import Perfil
 from apps.usuarios.resources import EmpresaResource, ProfesorResource, EstudianteResource

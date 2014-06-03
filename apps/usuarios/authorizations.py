@@ -34,13 +34,10 @@ class ClosedProfileAuth(ReadOnlyAuthorization):
 
     def read_list(self, object_list, bundle):
         # Todos tienen acceso al perfil menos las empresas sin cuenta premium
-        if es_empresa_no_premium(bundle.request.user):
-            raise Unauthorized()
-        else:
-            return object_list
+        return object_list
 
     def read_detail(self, object_list, bundle):
-        return not es_empresa_no_premium(bundle.request.user)
+        return True
 
     def update_list(self, object_list, bundle):
         allowed = []

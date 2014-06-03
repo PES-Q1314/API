@@ -10,7 +10,21 @@ from apps.usuarios.models import Empresa, Profesor, Estudiante
 RANDSEED = 1234  # Use 'static' seed to generate always the same profiles.
 random.seed(RANDSEED)  # Use None to produce different profiles every time.
 
-PUESTOS = ['Community Manager', 'Analista de sistemas', 'Arquitecto', 'Administrador de Bases de Datos', 'Diseñador gráfico', 'Ingeniero químico', 'Ingeniero mecánico', 'Ingeniero bioquímico', 'Desarrollador', 'Programador', 'Project manager', 'Experto en Marketing']
+PUESTOS_EMPRESA = [
+    ('Community Manager', 'Se busca community manager para gestionar el proceso de lanzamiento de nuevos productos'),
+    ('Analista de sistemas', 'Empresa consultora busca un analista para realizar auditorías de seguridad'),
+    ('Arquitecto', 'Buscamos un arquitecto junior para entrar en nuestro buffet, con posibilidades de ascenso'),
+    ('Administrador de Bases de Datos', 'Trabajo freelance para integrar varios sistemas de datos'),
+    ('Diseñador gráfico', '¿Eres una persona creativa? Demuéstralo y construye tu portfolio'),
+    ('Desarrollador web', 'Se busca desarrollador web para una nueva start-up en ronda de financiación B'),
+    ('Programador', '¿Sabes programar para iOS? Esta oferta es para tí'),
+]
+PUESTOS_DEPARTAMENTO = [
+    ('Ingeniero químico', 'Prácticas en el departamento de química orgánica'),
+    ('Ingeniero mecánico', 'Proyecto de robótica, TFG, Departamento de mecánica y robótica'),
+    ('Ingeniero bioquímico', '¿Buscas un TFG con opción a matrícula? Trabaja con nosotros')
+]
+
 DIRECCIONES = ['C/ Esports 1', 'Avg Diagonal 213', 'Av Meridiana 187', 'Plç Espanya 3', 'C/ Mallorca 43',
                'C/ Balmes 3', 'Passeig de Gracia, 34']
 DESCRIPCIONES = [
@@ -26,14 +40,18 @@ SECTORES = list(SectorDelMercado.objects.all()) if SectorDelMercado.objects.exis
 IDIOMAS = list(Idioma.objects.all()) if Idioma.objects.exists() else [crear_idioma()]
 ESPECIALIDADES = list(Especialidad.objects.all()) if Especialidad.objects.exists() else [crear_especialidad()]
 
+EMPRESAS =  list(Empresa.objects.all())
+ESTUDIANTES =  list(Estudiante.objects.all())
+PROFESORES =  list(Profesor.objects.all())
 
 
-def datos_generales_oferta():
-    p = random.choice(PUESTOS)
+
+def datos_generales_oferta(lista_de_puestos=PUESTOS_EMPRESA):
+    puesto, titulo = random.choice(lista_de_puestos)
     return {
-        'titulo': p,
-        'descripcion': random.choice(DESCRIPCIONES).format(p),
-        'puesto': p,
+        'titulo': titulo,
+        'descripcion': random.choice(DESCRIPCIONES).format(puesto),
+        'puesto': puesto,
         'meses_de_duracion': random.randint(1, 12),
         'fecha_de_incorporacion': datetime.date.today() + datetime.timedelta(weeks=random.randint(1, 52)),
         'numero_de_puestos_vacantes': random.randint(1, 6),
@@ -67,7 +85,7 @@ def incluir_extras(of):
 DATOS_OBLIGATORIOS_OFERTA = datos_generales_oferta()
 
 
-def crear_oferta_de_empresa(u=random.choice(list(Empresa.objects.all())), extras=True):
+def crear_oferta_de_empresa(u=random.choice(EMPRESAS), extras=True):
     datos = datos_generales_oferta()
     c = random.choice(CONTACTOS)
     datos.update({
@@ -83,8 +101,8 @@ def crear_oferta_de_empresa(u=random.choice(list(Empresa.objects.all())), extras
     return of
 
 
-def crear_oferta_de_departamento(u=random.choice(list(Profesor.objects.all())), extras=True):
-    datos = datos_generales_oferta()
+def crear_oferta_de_departamento(u=random.choice(PROFESORES), extras=True):
+    datos = datos_generales_oferta(PUESTOS_DEPARTAMENTO)
     datos.update({'usuario': u})
     of = OfertaDeDepartamento.objects.create(**datos)
     if extras:
@@ -92,7 +110,7 @@ def crear_oferta_de_departamento(u=random.choice(list(Profesor.objects.all())), 
     return of
 
 
-def crear_oferta_de_proyecto_emprendedor(u=random.choice(list(Estudiante.objects.all())), extras=True):
+def crear_oferta_de_proyecto_emprendedor(u=random.choice(ESTUDIANTES), extras=True):
     datos = datos_generales_oferta()
     datos.update({'usuario': u})
     of = OfertaDeProyectoEmprendedor.objects.create(**datos)
