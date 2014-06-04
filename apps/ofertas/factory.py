@@ -85,7 +85,8 @@ def incluir_extras(of):
 DATOS_OBLIGATORIOS_OFERTA = datos_generales_oferta()
 
 
-def crear_oferta_de_empresa(u=random.choice(EMPRESAS), extras=True):
+def crear_oferta_de_empresa(extras=True):
+    u=random.choice(EMPRESAS)
     datos = datos_generales_oferta()
     c = random.choice(CONTACTOS)
     datos.update({
@@ -101,7 +102,8 @@ def crear_oferta_de_empresa(u=random.choice(EMPRESAS), extras=True):
     return of
 
 
-def crear_oferta_de_departamento(u=random.choice(PROFESORES), extras=True):
+def crear_oferta_de_departamento(extras=True):
+    u=random.choice(PROFESORES)
     datos = datos_generales_oferta(PUESTOS_DEPARTAMENTO)
     datos.update({'usuario': u})
     of = OfertaDeDepartamento.objects.create(**datos)
@@ -110,7 +112,8 @@ def crear_oferta_de_departamento(u=random.choice(PROFESORES), extras=True):
     return of
 
 
-def crear_oferta_de_proyecto_emprendedor(u=random.choice(ESTUDIANTES), extras=True):
+def crear_oferta_de_proyecto_emprendedor(extras=True):
+    u=random.choice(ESTUDIANTES)
     datos = datos_generales_oferta()
     datos.update({'usuario': u})
     of = OfertaDeProyectoEmprendedor.objects.create(**datos)

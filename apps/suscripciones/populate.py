@@ -8,7 +8,7 @@ ofertas = list(Oferta.objects.all().select_subclasses())
 
 
 for i, est in enumerate(estudiantes):
-    for j in range(3):
-        of = ofertas[(i+j*7) % len(ofertas)]
+    for j in range(4):
+        of = ofertas[(i+j*3) % len(ofertas)]
         if of.usuario != est:
             Suscripcion.objects.create(suscriptor=est, modelo=of)

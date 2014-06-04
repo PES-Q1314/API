@@ -15,8 +15,21 @@ from tastypie.exceptions import ImmediateHttpResponse
 from tastypie.http import HttpUnauthorized
 
 
+class PerfilResource(RecursoGenerico):
+    tipo = fields.CharField(readonly=True)
+    email = fields.CharField(readonly=True)
 
-class EstudianteResource(RecursoDenunciable, RecursoCongelable, RecursoGenerico):
+    def dehydrate_tipo(self, bundle):
+        return Perfil.objects.get_subclass(pk=bundle.obj.pk).__class__.__name__
+
+    def dehydrate_email(self, bundle):
+        return bundle.obj.usuario.email
+
+    Meta = MetaGenerica(modelo=Perfil)
+    Meta.authorization = OpenProfileAuth()
+
+
+class EstudianteResource(RecursoDenunciable, RecursoCongelable, PerfilResource):
     conocimientos_tecnicos = fields.ToManyField('apps.usuarios.resources.EstudianteTieneConocimientoTecnicoResource',
                                                 'conocimiento_tecnico_set', full=True, null=True)
     experiencia_laboral = fields.ToManyField('apps.usuarios.resources.EstudianteTieneExperienciaLaboralResource',
@@ -27,13 +40,13 @@ class EstudianteResource(RecursoDenunciable, RecursoCongelable, RecursoGenerico)
     Meta.authorization = ClosedProfileAuth()
 
 
-class ProfesorResource(RecursoDenunciable, RecursoCongelable, RecursoGenerico):
+class ProfesorResource(RecursoDenunciable, RecursoCongelable, PerfilResource):
     Meta = MetaGenerica(modelo=Profesor)
     Meta.authorization = ClosedProfileAuth()
 
 
 class EmpresaResource(RecursoDenunciable, RecursoCongelable, RecursoIncluibleEnLaListaNegra, ActionResourceMixin,
-                      RecursoGenerico):
+                      PerfilResource):
     Meta = MetaGenerica(modelo=Empresa)
     Meta.authorization = OpenProfileAuth()
 
