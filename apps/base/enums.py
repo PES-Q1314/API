@@ -20,7 +20,7 @@ JORNADA_LABORAL = (
 ESTADO_DE_LA_SUSCRIPCION = (
     ('pendiente', 'Pendiente'),
     ('aceptada', 'Aceptada'),
-    ('descartada', 'Descartada')
+    ('rechazada', 'Rechazada')
 )
 
 ESTADO_DE_LA_CONGELACION = (
@@ -31,7 +31,7 @@ ESTADO_DE_LA_CONGELACION = (
 ESTADO_DE_LA_DENUNCIA = (
     ('pendiente', 'Pendiente'),
     ('resuelta', 'Resuelta'),
-    ('desestimada', 'Desestimada')
+    ('descartada', 'Descartada')
 )
 
 NIVEL_DE_CONOCIMIENTO = (
